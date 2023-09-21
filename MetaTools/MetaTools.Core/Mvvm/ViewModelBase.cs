@@ -7,12 +7,10 @@ namespace MetaTools.Core.Mvvm
     {
         protected ViewModelBase()
         {
-
         }
 
         public virtual void Destroy()
         {
-
         }
     }
 }

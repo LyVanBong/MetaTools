@@ -8,6 +8,7 @@
     <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MetaTools.Modules.AddFriends\MetaTools.Modules.AddFriends.csproj" />
     <ProjectReference Include="..\MetaTools.Core\MetaTools.Core.csproj" />
     <ProjectReference Include="..\Modules\MetaTools.Modules.ModuleName\MetaTools.Modules.ModuleName.csproj" />
     <ProjectReference Include="..\Services\MetaTools.Services.Interfaces\MetaTools.Services.Interfaces.csproj" />

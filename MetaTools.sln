@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools", "MetaTools\Meta
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.Core", "MetaTools\MetaTools.Core\MetaTools.Core.csproj", "{9D42BE9D-2B9C-4E86-8771-BD44EB26102C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTools.Modules.AddFriends", "MetaTools.Modules.AddFriends\MetaTools.Modules.AddFriends.csproj", "{F45DF884-8FB6-4398-9330-44244FA32014}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{9D42BE9D-2B9C-4E86-8771-BD44EB26102C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D42BE9D-2B9C-4E86-8771-BD44EB26102C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D42BE9D-2B9C-4E86-8771-BD44EB26102C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F45DF884-8FB6-4398-9330-44244FA32014}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F45DF884-8FB6-4398-9330-44244FA32014}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F45DF884-8FB6-4398-9330-44244FA32014}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F45DF884-8FB6-4398-9330-44244FA32014}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{FF0A9DB7-0951-41AD-AE7B-317102B65B89} = {5BCE9A8F-31EE-4ACD-919C-859A32193166}
 		{C40B55BD-A4A2-4B32-84DA-4C8159ECB41D} = {1FCFDF13-45F1-43D1-B393-54C417C3D741}
 		{A74E4192-062E-4C44-A0B7-4211CDEA5E35} = {1FCFDF13-45F1-43D1-B393-54C417C3D741}
+		{F45DF884-8FB6-4398-9330-44244FA32014} = {5BCE9A8F-31EE-4ACD-919C-859A32193166}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3DF6DAAA-BB56-40AE-8501-2762B6671C27}

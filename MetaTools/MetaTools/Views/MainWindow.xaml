@@ -1,10 +1,18 @@
-﻿<Window x:Class="MetaTools.Views.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:prism="http://prismlibrary.com/"
-        prism:ViewModelLocator.AutoWireViewModel="True"
-        xmlns:core="clr-namespace:MetaTools.Core;assembly=MetaTools.Core"
-        Title="{Binding Title}" Height="350" Width="525" >
+﻿<Window
+    x:Class="MetaTools.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:core="clr-namespace:MetaTools.Core;assembly=MetaTools.Core"
+    xmlns:prism="http://prismlibrary.com/"
+    Title="{Binding Title}"
+    MinWidth="1440"
+    MinHeight="810"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    Background="{StaticResource Gray200Brush}"
+    BorderThickness="0"
+    ResizeMode="CanResizeWithGrip"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="ThreeDBorderWindow">
     <Grid>
         <ContentControl prism:RegionManager.RegionName="{x:Static core:RegionNames.ContentRegion}" />
     </Grid>

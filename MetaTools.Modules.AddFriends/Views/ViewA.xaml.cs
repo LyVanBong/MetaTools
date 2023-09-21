@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace MetaTools.Modules.ModuleName.Views
+namespace MetaTools.Modules.AddFriends.Views
 {
     /// <summary>
     /// Interaction logic for ViewA.xaml
