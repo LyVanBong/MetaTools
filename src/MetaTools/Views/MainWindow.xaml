@@ -5,7 +5,7 @@
     xmlns:core="clr-namespace:MetaTools.Core;assembly=MetaTools.Core"
     xmlns:prism="http://prismlibrary.com/"
     Title="{Binding Title}"
-    MinWidth="1440"
+    MinWidth="1459"
     MinHeight="810"
     prism:ViewModelLocator.AutoWireViewModel="True"
     Background="{StaticResource Gray200Brush}"
@@ -13,7 +13,79 @@
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen"
     WindowStyle="ThreeDBorderWindow">
-    <Grid>
-        <ContentControl prism:RegionManager.RegionName="{x:Static core:RegionNames.ContentRegion}" />
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="200" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid
+            Grid.Row="0"
+            Grid.RowSpan="5"
+            Grid.Column="0"
+            Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="150" />
+            </Grid.RowDefinitions>
+            <Image Grid.Row="0" Source="../Resources/Images/icon.png" />
+
+            <ScrollViewer
+                Grid.Row="1"
+                HorizontalScrollBarVisibility="Hidden"
+                VerticalScrollBarVisibility="Hidden">
+                <StackPanel Orientation="Vertical">
+                    
+                </StackPanel>
+            </ScrollViewer>
+
+            <Border
+                Grid.Row="2"
+                Margin="10"
+                Background="#D0D2E4"
+                CornerRadius="30">
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="50" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Foreground="#6F6F6F"
+                        Text="Upgrade to pro for more resources"
+                        TextAlignment="Center"
+                        TextWrapping="Wrap" />
+                    <Button
+                        Grid.Row="1"
+                        Margin="30,5"
+                        Background="#4354F9"
+                        BorderThickness="0"
+                        Content="Upgrade"
+                        FontSize="18"
+                        FontWeight="ExtraBold"
+                        Foreground="White">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="20" />
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </Window>
