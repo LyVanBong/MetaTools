@@ -6,7 +6,9 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Resources\Images\dashboards.png" />
     <None Remove="Resources\Images\icon.png" />
+    <None Remove="Resources\Images\icon_2.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
@@ -21,8 +23,17 @@
     <ProjectReference Include="..\Services\MetaTools.Services\MetaTools.Services.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\dashboards.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\icon.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\icon_2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>

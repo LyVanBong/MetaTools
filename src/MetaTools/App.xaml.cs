@@ -5,6 +5,7 @@ using MetaTools.Views;
 using Prism.Ioc;
 using Prism.Modularity;
 using System.Windows;
+using MetaTools.ViewModels;
 
 namespace MetaTools
 {
