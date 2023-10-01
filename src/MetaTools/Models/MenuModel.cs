@@ -1,8 +1,35 @@
-﻿namespace MetaTools.Models;
+﻿using Prism.Mvvm;
 
-public class MenuModel
+namespace MetaTools.Models;
+
+public class MenuModel : BindableBase
 {
-    public string Title { get; set; }
-    public string Icon { get; set; }
-    public bool IsActive { get; set; }
+    private bool _isActive;
+    private string _icon;
+    private string _title;
+    private string _iconGray;
+
+    public string Title
+    {
+        get => _title;
+        set => SetProperty(ref _title, value);
+    }
+
+    public string Icon
+    {
+        get => _icon;
+        set => SetProperty(ref _icon, value);
+    }
+
+    public string IconWhite
+    {
+        get => _iconGray;
+        set => SetProperty(ref _iconGray, value);
+    }
+
+    public bool IsActive
+    {
+        get => _isActive;
+        set => SetProperty(ref _isActive, value);
+    }
 }
