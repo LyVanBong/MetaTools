@@ -41,7 +41,7 @@
                 FontSize="28"
                 FontWeight="ExtraBold"
                 Foreground="Black"
-                Text="Dashboard" />
+                Text="{Binding ModuleTitle}" />
             <Border
                 Grid.Column="2"
                 Margin="8"

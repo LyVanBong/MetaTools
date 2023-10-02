@@ -12,6 +12,7 @@ namespace MetaTools.ViewModels
     {
         private string _title = "Tools For Meta";
         private ObservableCollection<MenuModel> _menuModels;
+        private string _moduleTitle = "Dashboard";
 
         public string Title
         {
@@ -25,6 +26,12 @@ namespace MetaTools.ViewModels
         {
             get => _menuModels;
             set => SetProperty(ref _menuModels, value);
+        }
+
+        public string ModuleTitle
+        {
+            get => _moduleTitle;
+            set => SetProperty(ref _moduleTitle, value);
         }
 
         public MainWindowViewModel()
@@ -74,6 +81,8 @@ namespace MetaTools.ViewModels
             MenuModels.FirstOrDefault(x => x.IsActive)!.IsActive = false;
 
             para.IsActive = true;
+
+            ModuleTitle = para.Title;
 
             return Task.CompletedTask;
         }
