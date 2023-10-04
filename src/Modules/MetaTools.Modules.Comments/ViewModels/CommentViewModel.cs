@@ -1,13 +1,10 @@
-﻿using Prism.Commands;
+﻿using MetaTools.Modules.Comments.Helpers;
+using Prism.Commands;
 using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using MetaTools.Modules.Comments.Helpers;
-using System.Security.Cryptography;
 
 namespace MetaTools.Modules.Comments.ViewModels
 {
@@ -44,6 +41,7 @@ namespace MetaTools.Modules.Comments.ViewModels
 
         public ICommand StartCommand { get; private set; }
         public ICommand StopCommand { get; private set; }
+
         public CommentViewModel()
         {
             StartCommand = new DelegateCommand(StartAsync);
@@ -95,8 +93,9 @@ namespace MetaTools.Modules.Comments.ViewModels
                 Logger("Bắt đầu với UID: " + uid);
                 var getPara = FacebookHelper.GetParam(ck);
                 Logger("Lấy tham số đầu vào của UID: " + uid);
+                var ua = listUserAgent[lenUa];
                 var likeComment = await FacebookHelper.LikeComment2(ck, getPara.fb_dtsg, getPara.jazoest, Posts,
-                    uid, listUserAgent[lenUa]);
+                    uid, ua);
                 Logger("Like comment xong băng UID: " + uid);
 
                 if (lenUa == 0)

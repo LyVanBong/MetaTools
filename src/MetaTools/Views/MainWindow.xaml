@@ -2,7 +2,6 @@
     x:Class="MetaTools.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:core="clr-namespace:MetaTools.Core;assembly=MetaTools.Core"
     xmlns:prism="http://prismlibrary.com/"
     Title="{Binding Title}"
     MinWidth="1459"
@@ -458,7 +457,6 @@
                             </TextBlock>
                         </Grid>
                     </Border>
-
                 </StackPanel>
             </ScrollViewer>
 

@@ -1,6 +1,4 @@
 ﻿using MetaTools.Models;
-using Prism.Commands;
-using Prism.Mvvm;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;

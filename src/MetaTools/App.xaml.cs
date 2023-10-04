@@ -1,12 +1,9 @@
-﻿using MetaTools.Modules.ModuleName;
+﻿using MetaTools.Modules.Comments;
+using MetaTools.Modules.ModuleName;
 using MetaTools.Services;
 using MetaTools.Services.Interfaces;
 using MetaTools.Views;
-using Prism.Ioc;
-using Prism.Modularity;
 using System.Windows;
-using MetaTools.Modules.Comments;
-using MetaTools.ViewModels;
 
 namespace MetaTools
 {

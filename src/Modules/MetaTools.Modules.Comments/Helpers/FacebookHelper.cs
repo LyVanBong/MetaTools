@@ -56,6 +56,7 @@ namespace MetaTools.Modules.Comments.Helpers
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsStringAsync();
         }
+
         public static void LikeComment(string cookie, string fb_dtsg, string jazoest, string linkPosts, string uid)
         {
             var client = new HttpClient();
@@ -112,11 +113,10 @@ namespace MetaTools.Modules.Comments.Helpers
             var response = client.Send(request);
             response.EnsureSuccessStatusCode();
             var html = response.Content.ReadAsStringAsync().Result;
-
         }
+
         public static (string fb_dtsg, string jazoest) GetParam(string cookie)
         {
-
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Get, "https://d.facebook.com/");
             request.Headers.Add("authority", "d.facebook.com");
