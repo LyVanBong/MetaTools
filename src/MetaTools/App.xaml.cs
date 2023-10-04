@@ -4,6 +4,8 @@ using MetaTools.Services;
 using MetaTools.Services.Interfaces;
 using MetaTools.Views;
 using System.Windows;
+using Prism.Ioc;
+using Prism.Modularity;
 
 namespace MetaTools
 {
