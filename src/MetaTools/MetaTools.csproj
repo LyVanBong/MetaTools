@@ -8,6 +8,8 @@
   <ItemGroup>
     <None Remove="Resources\Images\chats.png" />
     <None Remove="Resources\Images\chats_gray.png" />
+    <None Remove="Resources\Images\comment.png" />
+    <None Remove="Resources\Images\comment_gray.png" />
     <None Remove="Resources\Images\dashboards.png" />
     <None Remove="Resources\Images\dashboards_gray.png" />
     <None Remove="Resources\Images\friends.png" />
@@ -38,6 +40,12 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\chats.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\comment.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\comment_gray.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\dashboards.png">

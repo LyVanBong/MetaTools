@@ -69,6 +69,12 @@ namespace MetaTools.ViewModels
                     Title = "Settings",
                     Icon = "../Resources/Images/settings_gray.png",
                     IconWhite = "../Resources/Images/settings.png",
+                },
+                new MenuModel()
+                {
+                    Title = "Comments",
+                    Icon = "../Resources/Images/comment_gray.png",
+                    IconWhite = "../Resources/Images/comment.png",
                 }
             };
         }

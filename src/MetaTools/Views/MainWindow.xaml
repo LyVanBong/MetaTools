@@ -267,6 +267,70 @@
                         </Grid>
                     </Border>
 
+                    <!--  Comments  -->
+                    <Border
+                        Height="60"
+                        Margin="0,0,20,0"
+                        CornerRadius="0,15,15,0">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding MenuModels[5].IsActive}" Value="False">
+                                        <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding MenuModels[5].IsActive}" Value="True">
+                                        <Setter Property="Background" Value="#4354F9" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Border.InputBindings>
+                            <MouseBinding
+                                Command="{Binding NavigationCommand}"
+                                CommandParameter="{Binding .MenuModels[5]}"
+                                MouseAction="LeftClick" />
+                        </Border.InputBindings>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Margin="5">
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding MenuModels[5].IsActive}" Value="False">
+                                                <Setter Property="Source" Value="{Binding MenuModels[5].Icon}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding MenuModels[5].IsActive}" Value="True">
+                                                <Setter Property="Source" Value="{Binding MenuModels[5].IconWhite}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                            <TextBlock
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                FontSize="20"
+                                FontWeight="ExtraBold"
+                                Text="{Binding MenuModels[5].Title}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding MenuModels[5].IsActive}" Value="False">
+                                                <Setter Property="Foreground" Value="#AAA" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding MenuModels[5].IsActive}" Value="True">
+                                                <Setter Property="Foreground" Value="#FFF" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+
                     <!--  Project  -->
                     <Border
                         Height="60"
