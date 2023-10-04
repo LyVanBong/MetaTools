@@ -31,6 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MetaTools.Core\MetaTools.Core.csproj" />
+    <ProjectReference Include="..\Modules\MetaTools.Modules.Comments\MetaTools.Modules.Comments.csproj" />
     <ProjectReference Include="..\Modules\MetaTools.Modules.ModuleName\MetaTools.Modules.ModuleName.csproj" />
     <ProjectReference Include="..\Services\MetaTools.Services.Interfaces\MetaTools.Services.Interfaces.csproj" />
     <ProjectReference Include="..\Services\MetaTools.Services\MetaTools.Services.csproj" />

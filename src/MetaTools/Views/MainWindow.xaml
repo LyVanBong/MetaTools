@@ -505,7 +505,7 @@
         <ContentControl
             Grid.Row="1"
             Grid.Column="1"
-            prism:RegionManager.RegionName="{x:Static core:RegionNames.ContentRegion}"
+            prism:RegionManager.RegionName="{x:Static core:RegionNames.Comments}"
             Background="Red" />
     </Grid>
 </Window>
