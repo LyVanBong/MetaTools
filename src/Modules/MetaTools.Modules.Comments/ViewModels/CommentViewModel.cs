@@ -91,18 +91,28 @@ namespace MetaTools.Modules.Comments.ViewModels
                 Logger("Lọc ký tự thừa trong cookie");
                 var uid = ck.Split("c_user=")[1].Split(';')[0];
                 Logger("Bắt đầu với UID: " + uid);
-                var getPara = FacebookHelper.GetParam(ck);
-                Logger("Lấy tham số đầu vào của UID: " + uid);
+
                 var ua = listUserAgent[lenUa];
-                var likeComment = await FacebookHelper.LikeComment2(ck, getPara.fb_dtsg, getPara.jazoest, Posts,
-                    uid, ua);
-                Logger("Like comment xong băng UID: " + uid);
+                var likeComment = await FacebookHelper.GetLinkLikeComment(ck, ua, Posts);
+                if (string.IsNullOrEmpty(likeComment))
+                {
+                    Logger("Không lấy được link like comment");
+                }
+                else
+                {
+                    await FacebookHelper.BuffLikeComment(ck, likeComment, ua);
+                    Logger("Like comment xong băng UID: " + uid);
+                }
+
+                await Task.Delay(Random.Shared.Next(1000, 3000));
 
                 if (lenUa == 0)
                 {
                     lenUa = listUserAgent.Length - 1;
                 }
             }
+
+            MessageBox.Show("Buff like comment done");
         }
 
         private void Logger(string log)
