@@ -1,11 +1,11 @@
-﻿using MetaTools.Modules.ModuleName;
+﻿using MetaTools.Modules.Comments;
+using MetaTools.Modules.ModuleName;
 using MetaTools.Services;
 using MetaTools.Services.Interfaces;
 using MetaTools.Views;
+using System.Windows;
 using Prism.Ioc;
 using Prism.Modularity;
-using System.Windows;
-using MetaTools.ViewModels;
 
 namespace MetaTools
 {
@@ -27,6 +27,7 @@ namespace MetaTools
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
             moduleCatalog.AddModule<ModuleNameModule>();
+            moduleCatalog.AddModule<CommentsModule>();
         }
     }
 }
