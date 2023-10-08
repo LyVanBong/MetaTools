@@ -24,6 +24,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\chats.png">
@@ -74,5 +76,8 @@
     <Resource Include="Resources\Images\user.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
 </Project>
