@@ -52,8 +52,9 @@ namespace MetaTools
         {
             containerRegistry.RegisterForNavigation<CommentView, CommentViewModel>();
             containerRegistry.RegisterForNavigation<DashboardView, DashboardViewModel>();
+            containerRegistry.RegisterForNavigation<AccountsView, AccountsViewModel>();
 
-            containerRegistry.RegisterDialog<NotificationDialog,NotificationDialogViewModel>();
+            containerRegistry.RegisterDialog<NotificationDialog, NotificationDialogViewModel>();
         }
     }
 }

@@ -1,0 +1,62 @@
+﻿<UserControl
+    x:Class="MetaTools.Views.AccountsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:prism="http://prismlibrary.com/"
+    prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="300" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border
+            Grid.Row="0"
+            Margin="5"
+            Background="White"
+            CornerRadius="10">
+            <GroupBox Header="Add Accounts">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+                    <TextBox
+                        Grid.Row="0"
+                        AcceptsReturn="True"
+                        Text="{Binding Accounts}"
+                        TextWrapping="Wrap" />
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                            <RadioButton Content="Cookie" IsChecked="{Binding IsCookie}" />
+                            <RadioButton Content="Account Info" IsChecked="{Binding IsAccount}" />
+                        </StackPanel>
+                        <Button
+                            Width="100"
+                            Margin="3"
+                            Background="#4354F9"
+                            Command="{Binding AddAccountsCommand}"
+                            Content="Add Accounts"
+                            Foreground="White" />
+                        <Button
+                            Width="100"
+                            Margin="3"
+                            Background="#C73131"
+                            Command="{Binding ResetInputCommand}"
+                            Content="Reset Input"
+                            Foreground="White" />
+                        <Button
+                            Width="100"
+                            Margin="3"
+                            Command="{Binding OpenfileCommand}"
+                            Content="Open File" />
+                        <TextBlock VerticalAlignment="Center" Text="{Binding PathOpenFileName}" />
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+        </Border>
+        <DataGrid
+            Grid.Row="1"
+            Margin="5"
+            Background="White" />
+    </Grid>
+</UserControl>

@@ -51,6 +51,14 @@ namespace MetaTools.ViewModels
             new MenuModel()
             {
                 Id = 4,
+                Title = "Accounts",
+                Icon = "../Resources/Images/account_gray.png",
+                IconWhite = "../Resources/Images/account.png",
+                ContentRegion = nameof(AccountsView)
+            },
+            new MenuModel()
+            {
+                Id = 5,
                 Title = "Settings",
                 Icon = "../Resources/Images/settings_gray.png",
                 IconWhite = "../Resources/Images/settings.png",

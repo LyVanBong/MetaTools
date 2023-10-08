@@ -5,6 +5,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Resources\Images\account.png" />
+    <None Remove="Resources\Images\account_gray.png" />
     <None Remove="Resources\Images\chats.png" />
     <None Remove="Resources\Images\chats_gray.png" />
     <None Remove="Resources\Images\comment.png" />
@@ -30,6 +32,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\account.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\account_gray.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\chats.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
