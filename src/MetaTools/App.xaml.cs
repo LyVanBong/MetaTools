@@ -51,6 +51,9 @@ namespace MetaTools
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<CommentView, CommentViewModel>();
+            containerRegistry.RegisterForNavigation<DashboardView, DashboardViewModel>();
+
+            containerRegistry.RegisterDialog<NotificationDialog,NotificationDialogViewModel>();
         }
     }
 }
