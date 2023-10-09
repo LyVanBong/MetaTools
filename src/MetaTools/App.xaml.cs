@@ -1,6 +1,10 @@
 ﻿using DryIoc;
+using MetaTools.Repositories;
 using MetaTools.ViewModels;
 using MetaTools.Views;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -43,6 +47,13 @@ namespace MetaTools
             app.RunAsync();
         }
 
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            AppCenter.Start("1eaba9dd-3cb4-40c0-8757-124b3b247488",
+                typeof(Analytics), typeof(Crashes));
+        }
+
         protected override Window CreateShell()
         {
             return Container.Resolve<MainWindow>();
@@ -55,6 +66,8 @@ namespace MetaTools
             containerRegistry.RegisterForNavigation<AccountsView, AccountsViewModel>();
 
             containerRegistry.RegisterDialog<NotificationDialog, NotificationDialogViewModel>();
+
+            containerRegistry.RegisterSingleton<IAccountInfoRepository, AccountInfoRepository>();
         }
     }
 }

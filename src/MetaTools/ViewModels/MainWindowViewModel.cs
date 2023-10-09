@@ -1,5 +1,7 @@
 ﻿using MetaTools.Models;
 using MetaTools.Views;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using Prism.Commands;
 using Prism.Regions;
 using Prism.Services.Dialogs;
@@ -90,6 +92,7 @@ namespace MetaTools.ViewModels
 
         public MainWindowViewModel(IRegionManager regionManager, IDialogService dialogService) : base(regionManager)
         {
+            Analytics.TrackEvent("MainWindowViewModel");
             _dialogService = dialogService;
             NavigationCommand = new DelegateCommand<MenuModel>((para) => NavigationAsync(para));
             _ = Initialization();
@@ -114,6 +117,7 @@ namespace MetaTools.ViewModels
             ModuleTitle = para.Title;
             if (para.ContentRegion != null)
             {
+                Analytics.TrackEvent("ContentRegion: " + para.ContentRegion);
                 RegionManager.RequestNavigate("ContentRegion", para.ContentRegion);
             }
 
