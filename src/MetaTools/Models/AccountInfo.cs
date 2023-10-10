@@ -1,7 +1,4 @@
-﻿using Prism.Mvvm;
-using SQLite;
-
-namespace MetaTools.Models;
+﻿namespace MetaTools.Models;
 
 public class AccountInfo : BindableBase
 {

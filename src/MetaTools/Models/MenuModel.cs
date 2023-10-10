@@ -1,6 +1,4 @@
-﻿using Prism.Mvvm;
-
-namespace MetaTools.Models;
+﻿namespace MetaTools.Models;
 
 public class MenuModel : BindableBase
 {

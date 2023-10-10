@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace MetaTools.Views
+﻿namespace MetaTools.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

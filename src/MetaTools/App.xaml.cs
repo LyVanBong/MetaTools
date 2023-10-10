@@ -1,20 +1,4 @@
-﻿using DryIoc;
-using MetaTools.Repositories;
-using MetaTools.Services.UserAgent;
-using MetaTools.ViewModels;
-using MetaTools.Views;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Prism.Ioc;
-using System.Windows;
-using MetaTools.BackgroundTasks;
-using MetaTools.RequestProvider;
-
-namespace MetaTools
+﻿namespace MetaTools
 {
     /// <summary>
     /// Interaction logic for App.xaml

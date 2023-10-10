@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json;
-using System.Threading.Tasks;
-using MetaTools.Models;
-using MetaTools.RequestProvider;
-using Microsoft.AppCenter.Crashes;
-using Microsoft.AspNetCore.Http.Json;
-
-namespace MetaTools.Services.UserAgent;
+﻿namespace MetaTools.Services.UserAgent;
 
 public class UserAgentService : IUserAgentService
 {

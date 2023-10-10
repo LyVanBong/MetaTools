@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace MetaTools.Models;
+﻿namespace MetaTools.Models;
 
 public class UserAgentModel
 {
@@ -74,4 +72,3 @@ public class Type
     [JsonPropertyName("bot")]
     public bool Bot { get; set; }
 }
-

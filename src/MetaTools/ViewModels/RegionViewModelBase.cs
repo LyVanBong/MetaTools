@@ -1,7 +1,4 @@
-﻿using Prism.Regions;
-using System;
-
-namespace MetaTools.ViewModels
+﻿namespace MetaTools.ViewModels
 {
     public class RegionViewModelBase : ViewModelBase, INavigationAware, IConfirmNavigationRequest
     {

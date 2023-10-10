@@ -1,7 +1,4 @@
-﻿using MetaTools.Repositories;
-using Microsoft.AspNetCore.Mvc;
-
-namespace MetaTools.Controllers
+﻿namespace MetaTools.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -13,6 +10,7 @@ namespace MetaTools.Controllers
         {
             _accountInfoRepository = accountInfoRepository;
         }
+
         [HttpGet("gets")]
         public IActionResult GetAll()
         {

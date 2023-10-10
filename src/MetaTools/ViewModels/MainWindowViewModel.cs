@@ -1,16 +1,4 @@
-﻿using MetaTools.Models;
-using MetaTools.Views;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-using Prism.Commands;
-using Prism.Regions;
-using Prism.Services.Dialogs;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-namespace MetaTools.ViewModels
+﻿namespace MetaTools.ViewModels
 {
     public class MainWindowViewModel : RegionViewModelBase
     {
@@ -26,7 +14,6 @@ namespace MetaTools.ViewModels
                 Icon = "../Resources/Images/dashboards_gray.png",
                 IconWhite = "../Resources/Images/dashboards.png",
                 ContentRegion = nameof(DashboardView)
-
             },
             new MenuModel()
             {
@@ -65,11 +52,11 @@ namespace MetaTools.ViewModels
                 Icon = "../Resources/Images/settings_gray.png",
                 IconWhite = "../Resources/Images/settings.png",
             },
-
         };
 
         private string _moduleTitle = "Dashboard";
         private readonly IDialogService _dialogService;
+
         public string Title
         {
             get { return _title; }
@@ -103,7 +90,6 @@ namespace MetaTools.ViewModels
             await Task.Delay(1000);
             RegionManager.RequestNavigate("ContentRegion", nameof(DashboardView));
         }
-
 
         private Task NavigationAsync(MenuModel para)
         {

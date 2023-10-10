@@ -1,10 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Web;
-
-namespace MetaTools.Helpers
+﻿namespace MetaTools.Helpers
 {
     public class FacebookHelper
     {

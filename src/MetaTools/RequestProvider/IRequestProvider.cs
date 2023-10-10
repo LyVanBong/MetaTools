@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace MetaTools.RequestProvider;
+﻿namespace MetaTools.RequestProvider;
 
 public interface IRequestProvider
 {

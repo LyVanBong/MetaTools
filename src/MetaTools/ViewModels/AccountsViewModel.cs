@@ -1,19 +1,4 @@
-﻿using MetaTools.Models;
-using MetaTools.Repositories;
-using MetaTools.Services.UserAgent;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.Win32;
-using Prism.Commands;
-using Prism.Regions;
-using System;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-
-namespace MetaTools.ViewModels
+﻿namespace MetaTools.ViewModels
 {
     public class AccountsViewModel : RegionViewModelBase
     {
@@ -40,6 +25,7 @@ namespace MetaTools.ViewModels
             get => _pathOpenFileName;
             set => SetProperty(ref _pathOpenFileName, value);
         }
+
         public ICommand AddAccountsCommand { get; private set; }
 
         public ObservableCollection<AccountInfo> AccountInfos
@@ -93,6 +79,7 @@ namespace MetaTools.ViewModels
             base.OnNavigatedTo(navigationContext);
             await GetAccounts();
         }
+
         /// <summary>
         /// Lấy danh sách tài khoản
         /// </summary>

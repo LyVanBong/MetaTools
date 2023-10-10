@@ -1,6 +1,4 @@
-﻿using System.Windows.Controls;
-
-namespace MetaTools.Views
+﻿namespace MetaTools.Views
 {
     /// <summary>
     /// Interaction logic for AccountsView

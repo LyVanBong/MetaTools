@@ -1,7 +1,4 @@
-﻿using Prism.Mvvm;
-using Prism.Navigation;
-
-namespace MetaTools.ViewModels
+﻿namespace MetaTools.ViewModels
 {
     public abstract class ViewModelBase : BindableBase, IDestructible
     {

@@ -1,12 +1,4 @@
-﻿using MetaTools.Helpers;
-using Prism.Commands;
-using Prism.Mvvm;
-using System;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-
-namespace MetaTools.ViewModels
+﻿namespace MetaTools.ViewModels
 {
     public class CommentViewModel : BindableBase
     {
