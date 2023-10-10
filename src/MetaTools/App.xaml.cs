@@ -16,6 +16,7 @@
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddHostedService<TestTask>();
+            builder.Services.AddSingleton<IAccountInfoRepository, AccountInfoRepository>();
 
             var app = builder.Build();
 
