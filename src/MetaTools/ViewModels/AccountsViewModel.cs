@@ -1,16 +1,17 @@
-﻿using ImTools;
-using MetaTools.Models;
+﻿using MetaTools.Models;
 using MetaTools.Repositories;
+using MetaTools.Services.UserAgent;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using MetaTools.Services.UserAgent;
 
 namespace MetaTools.ViewModels
 {
@@ -21,6 +22,9 @@ namespace MetaTools.ViewModels
         private ObservableCollection<AccountInfo> _accountInfos = new ObservableCollection<AccountInfo>();
         private readonly IAccountInfoRepository _accountInfoRepository;
         private readonly IUserAgentService _userAgentService;
+        private bool _isBusy;
+        private Visibility _visibility1 = Visibility.Hidden;
+        private Visibility _visibility = Visibility.Visible;
         public ICommand ResetInputCommand { get; private set; }
 
         public string Accounts
@@ -44,6 +48,36 @@ namespace MetaTools.ViewModels
             set => SetProperty(ref _accountInfos, value);
         }
 
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set => SetProperty(ref _isBusy, value, () =>
+            {
+                if (value)
+                {
+                    Visibility1 = Visibility.Visible;
+                    Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    Visibility1 = Visibility.Hidden;
+                    Visibility = Visibility.Visible;
+                }
+            });
+        }
+
+        public Visibility Visibility
+        {
+            get => _visibility;
+            set => SetProperty(ref _visibility, value);
+        }
+
+        public Visibility Visibility1
+        {
+            get => _visibility1;
+            set => SetProperty(ref _visibility1, value);
+        }
+
         public AccountsViewModel(IRegionManager regionManager, IAccountInfoRepository accountInfoRepository, IUserAgentService userAgentService) : base(regionManager)
         {
             _accountInfoRepository = accountInfoRepository;
@@ -57,6 +91,14 @@ namespace MetaTools.ViewModels
         public override async void OnNavigatedTo(NavigationContext navigationContext)
         {
             base.OnNavigatedTo(navigationContext);
+            await GetAccounts();
+        }
+        /// <summary>
+        /// Lấy danh sách tài khoản
+        /// </summary>
+        /// <returns></returns>
+        private async Task GetAccounts()
+        {
             var data = await _accountInfoRepository.GetAllAccountsAsync();
             if (data != null && data.Any())
             {
@@ -64,17 +106,19 @@ namespace MetaTools.ViewModels
             }
         }
 
-        private void AddAccounts()
+        private async void AddAccounts()
         {
             Analytics.TrackEvent("AddAccounts");
-            if (string.IsNullOrEmpty(Accounts)/* || string.IsNullOrEmpty(PathOpenFileName)*/)
+            if (string.IsNullOrEmpty(Accounts))
             {
                 MessageBox.Show("Input empty", "Notification", MessageBoxButton.OK);
                 return;
             }
+            if (IsBusy) return;
+            IsBusy = true;
 
             var lsAccounts = Accounts.Split("\n", StringSplitOptions.RemoveEmptyEntries);
-            lsAccounts.ForEach(async (account) =>
+            foreach (var account in lsAccounts)
             {
                 var ua = await _userAgentService.Generate();
                 AccountInfo acc;
@@ -107,11 +151,13 @@ namespace MetaTools.ViewModels
                         DateChange = DateTime.Now.ToString("G"),
                     };
                 }
-                AccountInfos.Add(acc);
                 await _accountInfoRepository.AddAccountAsync(acc);
-                ResetInput();
-                MessageBox.Show("Add account done", "Notification", MessageBoxButton.OK);
-            });
+            }
+
+            await GetAccounts();
+            ResetInput();
+            MessageBox.Show("Add account done", "Notification", MessageBoxButton.OK);
+            IsBusy = false;
         }
 
         private void Openfile()
@@ -124,6 +170,8 @@ namespace MetaTools.ViewModels
             if (openFileDialog.ShowDialog() == true)
             {
                 PathOpenFileName = openFileDialog.FileName;
+                var readFile = File.ReadAllText(PathOpenFileName);
+                Accounts = readFile.Trim() + "\n" + Accounts;
             }
         }
 

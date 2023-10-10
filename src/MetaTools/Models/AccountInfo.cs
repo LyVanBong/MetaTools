@@ -14,12 +14,12 @@ public class AccountInfo : BindableBase
     private int _totalGroups;
     private int _totalPages;
     private string _birthday;
-    private int _sex = -1;
+    private string _sex;
     private string _password;
     private string _twoFaCode;
     private string _useragent;
     private string _proxy;
-    private int _status = -1;
+    private string _status = "New";
     private string _descriptions;
     private string _email;
     private string _emailPassword;
@@ -112,14 +112,11 @@ public class AccountInfo : BindableBase
         set => SetProperty(ref _birthday, value);
     }
 
-    public int Sex
+    public string Sex
     {
         get => _sex;
-        set => SetProperty(ref _sex, value, SexChange);
+        set => SetProperty(ref _sex, value);
     }
-
-    [Ignore]
-    public string SexText { get; set; }
 
     public string Password
     {
@@ -145,64 +142,15 @@ public class AccountInfo : BindableBase
         set => SetProperty(ref _proxy, value);
     }
 
-    public int Status
+    public string Status
     {
         get => _status;
-        set => SetProperty(ref _status, value, StatusChange);
-    }
-
-    [Ignore]
-    public string StatusText
-    {
-        get;
-        set;
+        set => SetProperty(ref _status, value);
     }
 
     public string Descriptions
     {
         get => _descriptions;
         set => SetProperty(ref _descriptions, value);
-    }
-
-    private void StatusChange()
-    {
-        switch (Status)
-        {
-            case -1:
-                StatusText = "New";
-                break;
-
-            case 0:
-                StatusText = "In progress";
-                break;
-
-            case 1:
-                StatusText = "Live";
-                break;
-
-            default:
-                StatusText = "Checkpoint";
-                break;
-        }
-        RaisePropertyChanged(nameof(StatusText));
-    }
-
-    private void SexChange()
-    {
-        switch (Sex)
-        {
-            case 0:
-                SexText = "Male";
-                break;
-
-            case 1:
-                SexText = "Female";
-                break;
-
-            default:
-                SexText = "None";
-                break;
-        }
-        RaisePropertyChanged(nameof(SexText));
     }
 }

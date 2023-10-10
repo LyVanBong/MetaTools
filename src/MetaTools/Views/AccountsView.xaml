@@ -18,14 +18,18 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="40" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <TextBox
                         Grid.Row="0"
                         AcceptsReturn="True"
                         Text="{Binding Accounts}"
                         TextWrapping="Wrap" />
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <StackPanel
+                        Grid.Row="1"
+                        Height="40"
+                        Orientation="Horizontal"
+                        Visibility="{Binding Visibility}">
                         <Button
                             Width="100"
                             Margin="3"
@@ -47,6 +51,11 @@
                             Content="Open File" />
                         <TextBlock VerticalAlignment="Center" Text="{Binding PathOpenFileName}" />
                     </StackPanel>
+                    <ProgressBar
+                        Grid.Row="1"
+                        Height="25"
+                        IsIndeterminate="True"
+                        Visibility="{Binding Visibility1}" />
                 </Grid>
             </GroupBox>
         </Border>
@@ -60,7 +69,7 @@
                 <DataGridCheckBoxColumn Binding="{Binding IsSelected}" Header="Choose" />
                 <DataGridTextColumn Binding="{Binding Uid}" Header="UID" />
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
-                <DataGridTextColumn Binding="{Binding SexText}" Header="Gender" />
+                <DataGridTextColumn Binding="{Binding Sex}" Header="Gender" />
                 <DataGridTextColumn Binding="{Binding Birthday}" Header="Birthday" />
                 <DataGridTextColumn Binding="{Binding Password}" Header="Password" />
                 <DataGridTextColumn Binding="{Binding Email}" Header="Email" />
@@ -75,7 +84,7 @@
                 <DataGridTextColumn Binding="{Binding TotalPages}" Header="Pages" />
                 <DataGridTextColumn Binding="{Binding DateCreate}" Header="Date Create" />
                 <DataGridTextColumn Binding="{Binding DateChange}" Header="Date Change" />
-                <DataGridTextColumn Binding="{Binding StatusText}" Header="Status" />
+                <DataGridTextColumn Binding="{Binding Status}" Header="Status" />
                 <DataGridTextColumn Binding="{Binding Descriptions}" Header="Descriptions" />
             </DataGrid.Columns>
         </DataGrid>

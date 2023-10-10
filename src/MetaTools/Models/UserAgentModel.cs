@@ -1,77 +1,77 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace MetaTools.Models;
 
 public class UserAgentModel
 {
-    [JsonProperty("ua")]
+    [JsonPropertyName("ua")]
     public string Ua { get; set; }
 
-    [JsonProperty("type")]
+    [JsonPropertyName("type")]
     public Type Type { get; set; }
 
-    [JsonProperty("browser")]
+    [JsonPropertyName("browser")]
     public Browser Browser { get; set; }
 
-    [JsonProperty("os")]
+    [JsonPropertyName("os")]
     public Os Os { get; set; }
 
-    [JsonProperty("device")]
+    [JsonPropertyName("device")]
     public Device Device { get; set; }
 }
 
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
 public class Browser
 {
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string Name { get; set; }
 
-    [JsonProperty("version_major")]
+    [JsonPropertyName("version_major")]
     public int VersionMajor { get; set; }
 
-    [JsonProperty("version")]
+    [JsonPropertyName("version")]
     public string Version { get; set; }
 }
 
 public class Device
 {
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string Name { get; set; }
 
-    [JsonProperty("brand")]
+    [JsonPropertyName("brand")]
     public object Brand { get; set; }
 
-    [JsonProperty("model")]
+    [JsonPropertyName("model")]
     public object Model { get; set; }
 }
 
 public class Os
 {
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string Name { get; set; }
 
-    [JsonProperty("version_major")]
+    [JsonPropertyName("version_major")]
     public object VersionMajor { get; set; }
 
-    [JsonProperty("version")]
+    [JsonPropertyName("version")]
     public object Version { get; set; }
 }
 
 public class Type
 {
-    [JsonProperty("mobile")]
+    [JsonPropertyName("mobile")]
     public bool Mobile { get; set; }
 
-    [JsonProperty("tablet")]
+    [JsonPropertyName("tablet")]
     public bool Tablet { get; set; }
 
-    [JsonProperty("touch_capable")]
+    [JsonPropertyName("touch_capable")]
     public bool TouchCapable { get; set; }
 
-    [JsonProperty("pc")]
+    [JsonPropertyName("pc")]
     public bool Pc { get; set; }
 
-    [JsonProperty("bot")]
+    [JsonPropertyName("bot")]
     public bool Bot { get; set; }
 }
 

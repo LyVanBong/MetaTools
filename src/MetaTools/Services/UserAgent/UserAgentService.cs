@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MetaTools.Models;
 using MetaTools.RequestProvider;
 using Microsoft.AppCenter.Crashes;
+using Microsoft.AspNetCore.Http.Json;
 
 namespace MetaTools.Services.UserAgent;
 

@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Prism.Ioc;
 using System.Windows;
+using MetaTools.RequestProvider;
 
 namespace MetaTools
 {
@@ -70,6 +71,7 @@ namespace MetaTools
 
             containerRegistry.RegisterSingleton<IUserAgentService, UserAgentService>();
             containerRegistry.RegisterSingleton<IAccountInfoRepository, AccountInfoRepository>();
+            containerRegistry.RegisterSingleton<IRequestProvider, RequestProvider.RequestProvider>();
         }
     }
 }
