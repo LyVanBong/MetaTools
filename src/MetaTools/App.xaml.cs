@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Prism.Ioc;
 using System.Windows;
+using MetaTools.BackgroundTasks;
 using MetaTools.RequestProvider;
 
 namespace MetaTools
@@ -30,6 +31,7 @@ namespace MetaTools
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddHostedService<TestTask>();
 
             var app = builder.Build();
 
