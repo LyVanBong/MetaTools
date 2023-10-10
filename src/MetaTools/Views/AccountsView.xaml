@@ -26,10 +26,6 @@
                         Text="{Binding Accounts}"
                         TextWrapping="Wrap" />
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <StackPanel VerticalAlignment="Center" Orientation="Vertical">
-                            <RadioButton Content="Cookie" IsChecked="{Binding IsCookie}" />
-                            <RadioButton Content="Account Info" IsChecked="{Binding IsAccount}" />
-                        </StackPanel>
                         <Button
                             Width="100"
                             Margin="3"
@@ -64,7 +60,7 @@
                 <DataGridCheckBoxColumn Binding="{Binding IsSelected}" Header="Choose" />
                 <DataGridTextColumn Binding="{Binding Uid}" Header="UID" />
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
-                <DataGridTextColumn Binding="{Binding Sex}" Header="Gender" />
+                <DataGridTextColumn Binding="{Binding SexText}" Header="Gender" />
                 <DataGridTextColumn Binding="{Binding Birthday}" Header="Birthday" />
                 <DataGridTextColumn Binding="{Binding Password}" Header="Password" />
                 <DataGridTextColumn Binding="{Binding Email}" Header="Email" />
@@ -74,13 +70,12 @@
                 <DataGridTextColumn Binding="{Binding Useragent}" Header="UA" />
                 <DataGridTextColumn Binding="{Binding Proxy}" Header="Proxy" />
                 <DataGridTextColumn Binding="{Binding EmailPassword}" Header="Email Pass" />
-                <DataGridTextColumn Binding="{Binding Proxy}" Header="Proxy" />
                 <DataGridTextColumn Binding="{Binding TotalFriends}" Header="Friends" />
                 <DataGridTextColumn Binding="{Binding TotalGroups}" Header="Groups" />
                 <DataGridTextColumn Binding="{Binding TotalPages}" Header="Pages" />
                 <DataGridTextColumn Binding="{Binding DateCreate}" Header="Date Create" />
                 <DataGridTextColumn Binding="{Binding DateChange}" Header="Date Change" />
-                <DataGridTextColumn Binding="{Binding Status}" Header="Status" />
+                <DataGridTextColumn Binding="{Binding StatusText}" Header="Status" />
                 <DataGridTextColumn Binding="{Binding Descriptions}" Header="Descriptions" />
             </DataGrid.Columns>
         </DataGrid>

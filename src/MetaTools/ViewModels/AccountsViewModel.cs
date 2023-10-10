@@ -1,4 +1,8 @@
-﻿using Microsoft.Win32;
+﻿using ImTools;
+using MetaTools.Models;
+using MetaTools.Repositories;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Regions;
 using System;
@@ -6,11 +10,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using ImTools;
-using MetaTools.Models;
-using Microsoft.AppCenter.Analytics;
-using System.Security.Cryptography;
-using MetaTools.Repositories;
 
 namespace MetaTools.ViewModels
 {
@@ -18,8 +17,6 @@ namespace MetaTools.ViewModels
     {
         private string _accounts;
         private string _pathOpenFileName;
-        private bool _isAccount;
-        private bool _isCookie = true;
         private ObservableCollection<AccountInfo> _accountInfos = new ObservableCollection<AccountInfo>();
         private readonly IAccountInfoRepository _accountInfoRepository;
         public ICommand ResetInputCommand { get; private set; }
@@ -37,19 +34,6 @@ namespace MetaTools.ViewModels
             get => _pathOpenFileName;
             set => SetProperty(ref _pathOpenFileName, value);
         }
-
-        public bool IsCookie
-        {
-            get => _isCookie;
-            set => SetProperty(ref _isCookie, value);
-        }
-
-        public bool IsAccount
-        {
-            get => _isAccount;
-            set => SetProperty(ref _isAccount, value);
-        }
-
         public ICommand AddAccountsCommand { get; private set; }
 
         public ObservableCollection<AccountInfo> AccountInfos
@@ -100,6 +84,7 @@ namespace MetaTools.ViewModels
                         DateChange = DateTime.Now.ToString("G"),
                     };
                     AccountInfos.Add(acc);
+                    _accountInfoRepository.AddAccountAsync(acc);
                 }
                 else
                 {
@@ -116,9 +101,11 @@ namespace MetaTools.ViewModels
                         DateChange = DateTime.Now.ToString("G"),
                     };
                     AccountInfos.Add(acc);
+                    _accountInfoRepository.AddAccountAsync(acc);
                 }
+                ResetInput();
+                MessageBox.Show("Add account done", "Notification", MessageBoxButton.OK);
             });
-            var add = await _accountInfoRepository.AddAccountsAsync(AccountInfos);
         }
 
         private void Openfile()

@@ -1,5 +1,4 @@
-﻿using System;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 using SQLite;
 
 namespace MetaTools.Models;
@@ -15,12 +14,12 @@ public class AccountInfo : BindableBase
     private int _totalGroups;
     private int _totalPages;
     private string _birthday;
-    private int _sex;
+    private int _sex = -1;
     private string _password;
     private string _twoFaCode;
     private string _useragent;
     private string _proxy;
-    private int _status;
+    private int _status = -1;
     private string _descriptions;
     private string _email;
     private string _emailPassword;
@@ -63,6 +62,7 @@ public class AccountInfo : BindableBase
         get => _isSeclected;
         set => SetProperty(ref _isSeclected, value);
     }
+
     [PrimaryKey]
     public string Uid
     {
@@ -115,8 +115,11 @@ public class AccountInfo : BindableBase
     public int Sex
     {
         get => _sex;
-        set => SetProperty(ref _sex, value);
+        set => SetProperty(ref _sex, value, SexChange);
     }
+
+    [Ignore]
+    public string SexText { get; set; }
 
     public string Password
     {
@@ -145,12 +148,61 @@ public class AccountInfo : BindableBase
     public int Status
     {
         get => _status;
-        set => SetProperty(ref _status, value);
+        set => SetProperty(ref _status, value, StatusChange);
+    }
+
+    [Ignore]
+    public string StatusText
+    {
+        get;
+        set;
     }
 
     public string Descriptions
     {
         get => _descriptions;
         set => SetProperty(ref _descriptions, value);
+    }
+
+    private void StatusChange()
+    {
+        switch (Status)
+        {
+            case -1:
+                StatusText = "New";
+                break;
+
+            case 0:
+                StatusText = "In progress";
+                break;
+
+            case 1:
+                StatusText = "Live";
+                break;
+
+            default:
+                StatusText = "Checkpoint";
+                break;
+        }
+        RaisePropertyChanged(nameof(StatusText));
+    }
+
+    private void SexChange()
+    {
+        switch (Sex)
+        {
+            case 0:
+                SexText = "Male";
+                break;
+
+            case 1:
+                SexText = "Female";
+                break;
+
+            default:
+                SexText = "None";
+                break;
+        }
+        RaisePropertyChanged(nameof(SexText));
     }
 }
