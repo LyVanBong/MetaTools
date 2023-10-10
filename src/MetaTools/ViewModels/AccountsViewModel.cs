@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using MetaTools.Services.UserAgent;
 
 namespace MetaTools.ViewModels
 {
@@ -19,6 +20,7 @@ namespace MetaTools.ViewModels
         private string _pathOpenFileName;
         private ObservableCollection<AccountInfo> _accountInfos = new ObservableCollection<AccountInfo>();
         private readonly IAccountInfoRepository _accountInfoRepository;
+        private readonly IUserAgentService _userAgentService;
         public ICommand ResetInputCommand { get; private set; }
 
         public string Accounts
@@ -42,9 +44,10 @@ namespace MetaTools.ViewModels
             set => SetProperty(ref _accountInfos, value);
         }
 
-        public AccountsViewModel(IRegionManager regionManager, IAccountInfoRepository accountInfoRepository) : base(regionManager)
+        public AccountsViewModel(IRegionManager regionManager, IAccountInfoRepository accountInfoRepository, IUserAgentService userAgentService) : base(regionManager)
         {
             _accountInfoRepository = accountInfoRepository;
+            _userAgentService = userAgentService;
             Analytics.TrackEvent("AccountsViewModel");
             ResetInputCommand = new DelegateCommand(ResetInput);
             OpenfileCommand = new DelegateCommand(Openfile);
@@ -61,7 +64,7 @@ namespace MetaTools.ViewModels
             }
         }
 
-        private async void AddAccounts()
+        private void AddAccounts()
         {
             Analytics.TrackEvent("AddAccounts");
             if (string.IsNullOrEmpty(Accounts)/* || string.IsNullOrEmpty(PathOpenFileName)*/)
@@ -71,38 +74,41 @@ namespace MetaTools.ViewModels
             }
 
             var lsAccounts = Accounts.Split("\n", StringSplitOptions.RemoveEmptyEntries);
-            lsAccounts.ForEach(account =>
+            lsAccounts.ForEach(async (account) =>
             {
+                var ua = await _userAgentService.Generate();
+                AccountInfo acc;
                 if (account.Contains("c_user="))
                 {
                     var uid = account.Split("c_user=")[1].Trim().Split(";")[0].Trim();
-                    var acc = new AccountInfo()
+                    acc = new AccountInfo()
                     {
                         Uid = uid,
                         Cookie = account,
                         DateCreate = DateTime.Now.ToString("G"),
                         DateChange = DateTime.Now.ToString("G"),
+                        Useragent = ua.Ua,
                     };
-                    AccountInfos.Add(acc);
-                    _accountInfoRepository.AddAccountAsync(acc);
                 }
                 else
                 {
                     // 100055508814356|XP78ghymfw81951|N4A2PDIGF5UYBQ6L5PEBOI2KSJ5YCTBW|rebeccacutsingerv@hotmail.com|Mailmmo920
-                    var ls = account.Split("|");
-                    var acc = new AccountInfo()
+
+                    string[] ls = account.Split("|");
+                    acc = new AccountInfo()
                     {
                         Uid = ls[0],
                         Password = ls[1],
                         TwoFaCode = ls[2],
                         Email = ls[3],
                         EmailPassword = ls[4],
+                        Useragent = ua.Ua,
                         DateCreate = DateTime.Now.ToString("G"),
                         DateChange = DateTime.Now.ToString("G"),
                     };
-                    AccountInfos.Add(acc);
-                    _accountInfoRepository.AddAccountAsync(acc);
                 }
+                AccountInfos.Add(acc);
+                await _accountInfoRepository.AddAccountAsync(acc);
                 ResetInput();
                 MessageBox.Show("Add account done", "Notification", MessageBoxButton.OK);
             });

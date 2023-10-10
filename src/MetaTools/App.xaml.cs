@@ -1,5 +1,6 @@
 ﻿using DryIoc;
 using MetaTools.Repositories;
+using MetaTools.Services.UserAgent;
 using MetaTools.ViewModels;
 using MetaTools.Views;
 using Microsoft.AppCenter;
@@ -67,6 +68,7 @@ namespace MetaTools
 
             containerRegistry.RegisterDialog<NotificationDialog, NotificationDialogViewModel>();
 
+            containerRegistry.RegisterSingleton<IUserAgentService, UserAgentService>();
             containerRegistry.RegisterSingleton<IAccountInfoRepository, AccountInfoRepository>();
         }
     }
