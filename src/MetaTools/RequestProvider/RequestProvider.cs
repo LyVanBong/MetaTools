@@ -87,4 +87,24 @@ public class RequestProvider : IRequestProvider
         respone.EnsureSuccessStatusCode();
         return await respone?.Content?.ReadAsStringAsync();
     }
+
+    public async Task<(string Content, CookieContainer Cookie)> GetCookieAsync(string url, HttpMethod method, List<KeyValuePair<string, string>> headers = null, List<KeyValuePair<string, string>> body = null, string proxy = null)
+    {
+        CookieContainer cookieContainer = new CookieContainer();
+        HttpClientHandler httpClientHandler = new HttpClientHandler();
+        if (!string.IsNullOrEmpty(proxy))
+        {
+            httpClientHandler.UseProxy = true;
+            httpClientHandler.Proxy = new WebProxy(proxy);
+        }
+
+        httpClientHandler.UseCookies = true;
+        httpClientHandler.CookieContainer = cookieContainer;
+        HttpClient httpClient = new HttpClient(httpClientHandler);
+        HttpRequestMessage httpRequestMessage =
+            CreateHttpRequestMessage(url: url, method: method, headers: headers, body: body);
+        var respone = await httpClient.SendAsync(httpRequestMessage);
+        respone.EnsureSuccessStatusCode();
+        return (Content: await respone?.Content?.ReadAsStringAsync(), Cookie: cookieContainer);
+    }
 }

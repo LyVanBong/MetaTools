@@ -1,4 +1,6 @@
-﻿namespace MetaTools
+﻿using MetaTools.Services.Facebook;
+
+namespace MetaTools
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -17,6 +19,8 @@
             builder.Services.AddSwaggerGen();
             builder.Services.AddHostedService<TestTask>();
             builder.Services.AddSingleton<IAccountInfoRepository, AccountInfoRepository>();
+            builder.Services.AddSingleton<IRequestProvider, RequestProvider.RequestProvider>();
+            builder.Services.AddSingleton<IFacebookService, FacebookService>();
 
             var app = builder.Build();
 
@@ -59,6 +63,7 @@
             containerRegistry.RegisterSingleton<IUserAgentService, UserAgentService>();
             containerRegistry.RegisterSingleton<IAccountInfoRepository, AccountInfoRepository>();
             containerRegistry.RegisterSingleton<IRequestProvider, RequestProvider.RequestProvider>();
+            containerRegistry.RegisterSingleton<IFacebookService, FacebookService>();
         }
     }
 }
