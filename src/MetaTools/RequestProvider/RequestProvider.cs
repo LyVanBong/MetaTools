@@ -88,9 +88,16 @@ public class RequestProvider : IRequestProvider
         return await respone?.Content?.ReadAsStringAsync();
     }
 
-    public async Task<(string Content, CookieContainer Cookie)> GetCookieAsync(string url, HttpMethod method, List<KeyValuePair<string, string>> headers = null, List<KeyValuePair<string, string>> body = null, string proxy = null)
+    public async Task<(string Content, CookieContainer Cookie)> GetCookieAsync(string url,
+        HttpMethod method,
+        List<KeyValuePair<string,
+            string>> headers = null,
+        List<KeyValuePair<string, string>> body = null,
+        string proxy = null,
+        CookieContainer cookieContainer = null)
     {
-        CookieContainer cookieContainer = new CookieContainer();
+        if (cookieContainer == null)
+            cookieContainer = new CookieContainer();
         HttpClientHandler httpClientHandler = new HttpClientHandler();
         if (!string.IsNullOrEmpty(proxy))
         {

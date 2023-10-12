@@ -14,11 +14,14 @@ public class TestTask : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        string ua = "Mozilla/5.0 (X11; Linux i686; rv:49.0) Gecko/20100101 Firefox/49.0";
-        var para = await _facebookService.GetParaLogin(ua);
+        //string ua = "Mozilla/5.0 (X11; Linux i686; rv:49.0) Gecko/20100101 Firefox/49.0";
+        //var para = await _facebookService.GetParaLogin(ua);
 
-        var data = await _facebookService.Login(para.action, "bonglvno1@gmail.com", "D1fc0nku.,@123", ua, para.lsd,
-            para.jazoest, para.m_ts, para.li, para.try_number, para.unrecognized_tries, para.login, para.bi_xrwh);
+        //var data = await _facebookService.Login(para.action, "bonglvno1@gmail.com", "D1fc0nku.,@123", ua, para.lsd,
+        //    para.jazoest, para.m_ts, para.li, para.try_number, para.unrecognized_tries, para.login, para.bi_xrwh);
+
+
+   var fdat=     FacebookHelper.Loginrequest("bonglvno1@gmail.com", "D1fc0nku.,@123", "abc");
 
     }
 }

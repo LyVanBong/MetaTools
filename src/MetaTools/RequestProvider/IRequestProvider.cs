@@ -15,6 +15,7 @@ public interface IRequestProvider
         HttpMethod method,
         List<KeyValuePair<string, string>> headers = null,
         List<KeyValuePair<string, string>> body = null,
-        string proxy = null
+        string proxy = null,
+        CookieContainer cookieContainer = null
         );
 }

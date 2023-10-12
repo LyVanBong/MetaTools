@@ -93,4 +93,9 @@
   <ItemGroup>
     <Folder Include="BackgroundTasks\" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="xNet">
+      <HintPath>..\..\..\..\..\Downloads\xNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

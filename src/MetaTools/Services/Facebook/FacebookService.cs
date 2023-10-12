@@ -75,11 +75,51 @@ public class FacebookService : IFacebookService
             collection.Add(new("bi_xrwh", bi_xrwh));
 
             var data = await _requestProvider.GetCookieAsync("https://d.facebook.com" + action, method: HttpMethod.Post, header, collection);
-            var cookies = data.Cookie.GetCookies(new Uri("https://d.facebook.com" + action));
-            foreach (Cookie cookie in cookies)
-            {
+            var cookies = data.Cookie;
 
+            var para = await GetParaLogin(ua);
+
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            httpClientHandler.UseCookies = true;
+            httpClientHandler.CookieContainer = cookies;
+
+            var ck2 = cookies.GetAllCookies();
+            foreach (Cookie o in ck2)
+            {
+                
             }
+
+            var client = new HttpClient(httpClientHandler);
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://d.facebook.com/login/checkpoint/");
+            request.Headers.Add("authority", "d.facebook.com");
+            request.Headers.Add("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            request.Headers.Add("accept-language", "en-US,en;q=0.9");
+            request.Headers.Add("cache-control", "max-age=0");
+            request.Headers.Add("dpr", "1");
+            request.Headers.Add("origin", "https://d.facebook.com");
+            request.Headers.Add("sec-ch-prefers-color-scheme", "dark");
+            request.Headers.Add("sec-fetch-dest", "document");
+            request.Headers.Add("sec-fetch-mode", "navigate");
+            request.Headers.Add("sec-fetch-site", "same-origin");
+            request.Headers.Add("sec-fetch-user", "?1");
+            request.Headers.Add("upgrade-insecure-requests", "1");
+            request.Headers.Add("user-agent", ua);
+            request.Headers.Add("viewport-width", "709");
+            collection = new List<KeyValuePair<string, string>>();
+            collection.Add(new("fb_dtsg", "V87tjjmjz7Y="));
+            collection.Add(new("jazoest", "21067"));
+            collection.Add(new("checkpoint_data", ""));
+            collection.Add(new("approvals_code", "654321"));
+            collection.Add(new("codes_submitted", "0"));
+            collection.Add(new("submit[Submit Code]", "Submit Code"));
+            collection.Add(new("nh", "a2d4e73a12af73bff1325cd14a25520bc8aecd05"));
+            var content = new FormUrlEncodedContent(collection);
+            request.Content = content;
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var data2 = await response.Content.ReadAsStringAsync();
+
+
 
         }
         catch (Exception e)
