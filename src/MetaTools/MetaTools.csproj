@@ -25,6 +25,7 @@
     <None Remove="Resources\Images\user.png" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Leaf.xNet" Version="5.2.10" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.3" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.3" />
     <PackageReference Include="Notification.Wpf" Version="7.0.0.2" />
