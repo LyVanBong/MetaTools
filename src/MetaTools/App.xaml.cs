@@ -1,4 +1,6 @@
-﻿using MetaTools.Services.Facebook;
+﻿using MetaTools.Services.Account;
+using MetaTools.Services.Facebook;
+using MetaTools.Services.TwoFactorAuthentication;
 
 namespace MetaTools
 {
@@ -17,10 +19,12 @@ namespace MetaTools
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddHostedService<TestTask>();
+            builder.Services.AddHostedService<AccountBackgroundTask>();
             builder.Services.AddSingleton<IAccountInfoRepository, AccountInfoRepository>();
             builder.Services.AddSingleton<IRequestProvider, RequestProvider.RequestProvider>();
             builder.Services.AddSingleton<IFacebookService, FacebookService>();
+            builder.Services.AddSingleton<ITwoFactorAuthentication, TwoFactorAuthentication>();
+            builder.Services.AddSingleton<IAccountService, AccountService>();
 
             var app = builder.Build();
 
@@ -64,6 +68,8 @@ namespace MetaTools
             containerRegistry.RegisterSingleton<IAccountInfoRepository, AccountInfoRepository>();
             containerRegistry.RegisterSingleton<IRequestProvider, RequestProvider.RequestProvider>();
             containerRegistry.RegisterSingleton<IFacebookService, FacebookService>();
+            containerRegistry.RegisterSingleton<ITwoFactorAuthentication, TwoFactorAuthentication>();
+            containerRegistry.RegisterSingleton<IAccountService, AccountService>();
         }
     }
 }

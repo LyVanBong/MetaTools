@@ -11,18 +11,20 @@ public class AccountInfo : BindableBase
     private int _totalGroups;
     private int _totalPages;
     private string _birthday;
-    private string _sex;
+    private int _sex;
     private string _password;
-    private string _twoFaCode;
+    private string _secretKey2Fa;
     private string _useragent;
     private string _proxy;
-    private string _status = "New";
+    private int _status;
     private string _descriptions;
     private string _email;
     private string _emailPassword;
     private string _dateCreate;
     private string _dateChange;
     private int _accountType;
+    private string _sexText;
+    private string _statusText;
 
     public int AccountType
     {
@@ -109,10 +111,30 @@ public class AccountInfo : BindableBase
         set => SetProperty(ref _birthday, value);
     }
 
-    public string Sex
+    public int Sex
     {
         get => _sex;
-        set => SetProperty(ref _sex, value);
+        set => SetProperty(ref _sex, value, () =>
+        {
+            if (value == -1)
+            {
+                SexText = "None";
+            }
+            else if (value == 0)
+            {
+                SexText = "Male";
+            }
+            else if (value == 1)
+            {
+                SexText = "Female";
+            }
+        });
+    }
+
+    public string SexText
+    {
+        get => _sexText;
+        set => SetProperty(ref _sexText, value);
     }
 
     public string Password
@@ -121,10 +143,10 @@ public class AccountInfo : BindableBase
         set => SetProperty(ref _password, value);
     }
 
-    public string TwoFaCode
+    public string SecretKey2Fa
     {
-        get => _twoFaCode;
-        set => SetProperty(ref _twoFaCode, value);
+        get => _secretKey2Fa;
+        set => SetProperty(ref _secretKey2Fa, value);
     }
 
     public string Useragent
@@ -139,10 +161,46 @@ public class AccountInfo : BindableBase
         set => SetProperty(ref _proxy, value);
     }
 
-    public string Status
+    public int Status
     {
         get => _status;
-        set => SetProperty(ref _status, value);
+        set => SetProperty(ref _status, value, () =>
+        {
+            switch (value)
+            {
+                case -1:
+                    StatusText = "CheckPoint";
+                    break;
+                case 0:
+                    StatusText = "New";
+                    break;
+                case 1:
+                    StatusText = "Get Cookie";
+                    break;
+                case 4:
+                    StatusText = "Get Cookie Done";
+                    break;
+                case 2:
+                    StatusText = "Get Cookie P5";
+                    break;
+                case 5:
+                    StatusText = "Get Cookie P5 Done";
+                    break;
+               
+                case 3:
+                    StatusText = "Live";
+                    break;
+                default:
+                    StatusText = "New";
+                    break;
+            }
+        });
+    }
+
+    public string StatusText
+    {
+        get => _statusText;
+        set => SetProperty(ref _statusText, value);
     }
 
     public string Descriptions

@@ -1,132 +1,276 @@
-﻿namespace MetaTools.Services.Facebook;
+﻿using Leaf.xNet;
+using MetaTools.Services.TwoFactorAuthentication;
+
+namespace MetaTools.Services.Facebook;
 
 public class FacebookService : IFacebookService
 {
-    private readonly IRequestProvider _requestProvider;
+    private readonly ITwoFactorAuthentication _twoFactorAuthentication;
 
-    public FacebookService(IRequestProvider requestProvider)
+    public FacebookService(ITwoFactorAuthentication twoFactorAuthentication)
     {
-        _requestProvider = requestProvider;
+        _twoFactorAuthentication = twoFactorAuthentication;
     }
 
-    public async Task<(string action, string lsd, string jazoest, string m_ts, string li, string login, string bi_xrwh, string unrecognized_tries, string try_number)> GetParaLogin(string ua)
+    public async Task<string> Login(string email, string pass, string secretKey, string ua, string proxy)
     {
         try
         {
-            List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>
+            using (HttpRequest request = new HttpRequest())
             {
-                new KeyValuePair<string, string>("User-Agent",ua),
-            };
-            string html = await _requestProvider.GetAsync("https://d.facebook.com/login.php", headers: headers);
+                if (proxy != null)
+                    request.Proxy = HttpProxyClient.Parse(proxy);
 
-            html = Regex.Match(html, @"<form(.*?)</form>")?.Groups[1]?.Value;
+                if (ua != null)
+                    request.UserAgent = ua;
 
-            string action = Regex.Match(html, @"action=""(.*?)""")?.Groups[1]?.Value;
-            action = HttpUtility.HtmlDecode(action);
+                var respone = request.Get("https://d.facebook.com/login.php");
 
-            string lsd = Regex.Match(html, @"name=""lsd"" value=""(.*?)""")?.Groups[1]?.Value;
+                string html = respone.ToString();
 
-            string jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""")?.Groups[1]?.Value;
+                string cookie = respone.Cookies.GetCookieHeader(respone.Address);
 
-            string m_ts = Regex.Match(html, @"name=""m_ts"" value=""(.*?)""")?.Groups[1]?.Value;
+                if (cookie.Contains("c_user"))
+                {
+                    return cookie;
+                }
 
-            string li = Regex.Match(html, @"name=""li"" value=""(.*?)""")?.Groups[1]?.Value;
+                var match = Regex.Match(html, @"<form(.*?)</form>");
 
-            string bi_xrwh = Regex.Match(html, @"name=""bi_xrwh"" value=""(.*?)""")?.Groups[1]?.Value;
+                html = match.Value;
 
-            string login = Regex.Match(html, @"<input value=""(.*?)"" type=""submit"" name=""login""")?.Groups[1]
-                ?.Value;
-            login = HttpUtility.HtmlDecode(login);
+                string action = HttpUtility.HtmlDecode(Regex.Match(html, @"action=""(.*?)""").Groups[1].Value);
 
-            string unrecognized_tries = Regex.Match(html, @"name=""unrecognized_tries"" value=""(.*?)""")?.Groups[1]?.Value;
+                string jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1].Value;
 
-            string try_number = Regex.Match(html, @"name=""try_number"" value=""(.*?)""")?.Groups[1]?.Value;
+                string lsd = Regex.Match(html, @"name=""lsd"" value=""(.*?)""").Groups[1].Value;
+
+                string m_ts = Regex.Match(html, @"name=""m_ts"" value=""(.*?)""").Groups[1].Value;
+
+                string li = Regex.Match(html, @"name=""li"" value=""(.*?)""").Groups[1].Value;
+
+                string try_number = Regex.Match(html, @"name=""try_number"" value=""(.*?)""").Groups[1].Value;
+
+                string unrecognized_tries =
+                    Regex.Match(html, @"name=""unrecognized_tries"" value=""(.*?)""").Groups[1].Value;
+
+                var urlParams = new RequestParams();
+
+                urlParams["pass"] = pass;
+                urlParams["email"] = email;
+                urlParams["jazoest"] = jazoest;
+                urlParams["lsd"] = lsd;
+                urlParams["m_ts"] = m_ts;
+                urlParams["li"] = li;
+                urlParams["try_number"] = try_number;
+                urlParams["unrecognized_tries"] = unrecognized_tries;
+
+                respone = request.Post("https://d.facebook.com" + action, urlParams);
+
+                html = respone.ToString();
+
+                cookie = respone.Cookies.GetCookieHeader(respone.Address);
+
+                if (cookie.Contains("c_user"))
+                {
+                    return cookie;
+                }
+
+                respone = request.Get("https://d.facebook.com/login/checkpoint/");
+
+                html = respone.ToString();
+
+                cookie = respone.Cookies.GetCookieHeader(respone.Address);
+
+                if (cookie.Contains("c_user"))
+                {
+                    return cookie;
+                }
+
+                html = Regex
+                    .Match(html, @"<form method=""post"" action=""/login/checkpoint/""(.*?)</form>").Value;
+
+                string fb_dtsg = Regex.Matches(html, @"name=""fb_dtsg"" value=""(.*?)""")[1].Groups[1].Value;
+
+                string approvals_code = _twoFactorAuthentication.GetCode2Fa(secretKey);
+
+                action = HttpUtility.HtmlDecode(Regex.Match(html, @"action=""(.*?)""").Groups[1].Value);
+
+                jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1].Value;
+
+                string nh = Regex.Match(html, @"name=""nh"" value=""(.*?)""").Groups[1].Value;
+
+                string codes_submitted = Regex.Match(html, @"name=""codes_submitted"" value=""(.*?)""").Groups[1].Value;
+
+                urlParams = new RequestParams();
+                urlParams["fb_dtsg"] = fb_dtsg;
+                urlParams["jazoest"] = jazoest;
+                urlParams["approvals_code"] = approvals_code;
+                urlParams["codes_submitted"] = codes_submitted;
+                urlParams["submit[Submit Code]"] = "Submit Code";
+                urlParams["checkpoint_data"] = "";
+                urlParams["nh"] = nh;
+                urlParams["fb_dtsg"] = fb_dtsg;
+                urlParams["jazoest"] = jazoest;
+
+                respone = request.Post("https://d.facebook.com" + action, urlParams);
+
+                html = respone.ToString();
+
+                cookie = respone.Cookies.GetCookieHeader(respone.Address);
+
+                if (cookie.Contains("c_user"))
+                {
+                    return cookie;
+                }
+
+                html = Regex.Match(html, @"<form method=""post"" action=""/login/checkpoint/""(.*?)</form>").Value;
+
+                fb_dtsg = Regex.Matches(html, @"name=""fb_dtsg"" value=""(.*?)""")[1].Groups[1].Value;
+
+                action = HttpUtility.HtmlDecode(Regex.Match(html, @"action=""(.*?)""").Groups[1].Value);
+
+                jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1].Value;
+
+                string name_action_selected =
+                    Regex.Match(html, @"name=""name_action_selected"" value=""(.*?)"" checked=""1"" ").Groups[1].Value;
+
+                nh = Regex.Match(html, @"name=""nh"" value=""(.*?)""").Groups[1].Value;
+
+                urlParams = new RequestParams();
+                urlParams["fb_dtsg"] = fb_dtsg;
+                urlParams["jazoest"] = jazoest;
+                urlParams["name_action_selected"] = name_action_selected;
+                urlParams["submit[Continue]"] = "Continue";
+                urlParams["checkpoint_data"] = "";
+                urlParams["nh"] = nh;
+                urlParams["fb_dtsg"] = fb_dtsg;
+                urlParams["jazoest"] = jazoest;
+
+                respone = request.Post("https://d.facebook.com" + action, urlParams);
+
+                html = respone.ToString();
+
+                cookie = respone.Cookies.GetCookieHeader(respone.Address);
+
+                if (cookie.Contains("c_user"))
+                {
+                    return cookie;
+                }
+
+                html = Regex.Match(html, @"<form method=""post"" action=""/login/checkpoint/""(.*?)</form>").Value;
+
+                fb_dtsg = Regex.Matches(html, @"name=""fb_dtsg"" value=""(.*?)""")[1].Groups[1].Value;
+
+                action = HttpUtility.HtmlDecode(Regex.Match(html, @"action=""(.*?)""").Groups[1].Value);
+
+                jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1].Value;
+
+                nh = Regex.Match(html, @"name=""nh"" value=""(.*?)""").Groups[1].Value;
+
+                urlParams = new RequestParams();
+                urlParams["fb_dtsg"] = fb_dtsg;
+                urlParams["jazoest"] = jazoest;
+                urlParams["submit[Continue]"] = "Continue";
+                urlParams["checkpoint_data"] = "";
+                urlParams["nh"] = nh;
+                urlParams["fb_dtsg"] = fb_dtsg;
+                urlParams["jazoest"] = jazoest;
+
+                respone = request.Post("https://d.facebook.com" + action, urlParams);
+
+                html = respone.ToString();
+
+                cookie = respone.Cookies.GetCookieHeader(respone.Address);
+
+                if (cookie.Contains("c_user"))
+                {
+                    return cookie;
+                }
 
 
-            return (action: action, lsd: lsd, jazoest: jazoest, m_ts: m_ts, li: li, bi_xrwh: bi_xrwh, login: login, unrecognized_tries: unrecognized_tries, try_number: try_number);
-        }
-        catch (Exception e)
-        {
-            Crashes.TrackError(e);
-        }
+                html = Regex.Match(html, @"<form method=""post"" action=""/login/checkpoint/""(.*?)</form>").Value;
 
-        return default;
-    }
+                fb_dtsg = Regex.Matches(html, @"name=""fb_dtsg"" value=""(.*?)""")[1].Groups[1].Value;
 
-    public async Task<string> Login(string action, string email, string pass, string ua, string lsd, string jazoest, string m_ts, string li, string try_number, string unrecognized_tries, string login, string bi_xrwh)
-    {
-        try
-        {
-            var header = new List<KeyValuePair<string, string>>();
-            header.Add(new("User-Agent", ua));
-            header.Add(new("origin", "https://d.facebook.com"));
-            header.Add(new("referer", "https://d.facebook.com/login.php"));
-            header.Add(new("viewport-width", Random.Shared.Next(500, 1200) + ""));
-            var collection = new List<KeyValuePair<string, string>>();
-            collection.Add(new("lsd", lsd));
-            collection.Add(new("jazoest", jazoest));
-            collection.Add(new("m_ts", m_ts));
-            collection.Add(new("li", li));
-            collection.Add(new("try_number", try_number));
-            collection.Add(new("unrecognized_tries", unrecognized_tries));
-            collection.Add(new("email", email));
-            collection.Add(new("pass", pass));
-            collection.Add(new("login", login));
-            collection.Add(new("bi_xrwh", bi_xrwh));
+                action = HttpUtility.HtmlDecode(Regex.Match(html, @"action=""(.*?)""").Groups[1].Value);
 
-            var data = await _requestProvider.GetCookieAsync("https://d.facebook.com" + action, method: HttpMethod.Post, header, collection);
-            var cookies = data.Cookie;
+                jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1].Value;
 
-            var para = await GetParaLogin(ua);
+                nh = Regex.Match(html, @"name=""nh"" value=""(.*?)""").Groups[1].Value;
 
-            HttpClientHandler httpClientHandler = new HttpClientHandler();
-            httpClientHandler.UseCookies = true;
-            httpClientHandler.CookieContainer = cookies;
+                urlParams = new RequestParams();
+                urlParams["fb_dtsg"] = fb_dtsg;
+                urlParams["jazoest"] = jazoest;
+                urlParams["submit[This was me]"] = "This was me";
+                urlParams["checkpoint_data"] = "";
+                urlParams["nh"] = nh;
+                urlParams["fb_dtsg"] = fb_dtsg;
+                urlParams["jazoest"] = jazoest;
 
-            var ck2 = cookies.GetAllCookies();
-            foreach (Cookie o in ck2)
-            {
-                
+                respone = request.Post("https://d.facebook.com" + action, urlParams);
+
+                html = respone.ToString();
+
+                cookie = respone.Cookies.GetCookieHeader(respone.Address);
+
+                if (cookie.Contains("c_user"))
+                {
+                    return cookie;
+                }
+
+
+                html = Regex.Match(html, @"<form method=""post"" action=""/login/checkpoint/""(.*?)</form>").Value;
+
+                fb_dtsg = Regex.Matches(html, @"name=""fb_dtsg"" value=""(.*?)""")[1].Groups[1].Value;
+
+                action = HttpUtility.HtmlDecode(Regex.Match(html, @"action=""(.*?)""").Groups[1].Value);
+
+                jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1].Value;
+
+                name_action_selected =
+                    Regex.Match(html, @"name=""name_action_selected"" value=""(.*?)"" checked=""1"" ").Groups[1].Value;
+
+                nh = Regex.Match(html, @"name=""nh"" value=""(.*?)""").Groups[1].Value;
+
+                urlParams = new RequestParams();
+                urlParams["fb_dtsg"] = fb_dtsg;
+                urlParams["jazoest"] = jazoest;
+                urlParams["name_action_selected"] = name_action_selected;
+                urlParams["submit[Continue]"] = "Continue";
+                urlParams["checkpoint_data"] = "";
+                urlParams["nh"] = nh;
+                urlParams["fb_dtsg"] = fb_dtsg;
+                urlParams["jazoest"] = jazoest;
+
+                respone = request.Post("https://d.facebook.com" + action, urlParams);
+
+                html = respone.ToString();
+
+                cookie = respone.Cookies.GetCookieHeader(respone.Address);
+
+                if (cookie.Contains("c_user"))
+                {
+                    return cookie;
+                }
+
+                respone = request.Get("https://d.facebook.com");
+
+                html = respone.ToString();
+
+                cookie = respone.Cookies.GetCookieHeader(respone.Address);
+
+                if (cookie.Contains("c_user"))
+                {
+                    return cookie;
+                }
             }
-
-            var client = new HttpClient(httpClientHandler);
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://d.facebook.com/login/checkpoint/");
-            request.Headers.Add("authority", "d.facebook.com");
-            request.Headers.Add("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
-            request.Headers.Add("accept-language", "en-US,en;q=0.9");
-            request.Headers.Add("cache-control", "max-age=0");
-            request.Headers.Add("dpr", "1");
-            request.Headers.Add("origin", "https://d.facebook.com");
-            request.Headers.Add("sec-ch-prefers-color-scheme", "dark");
-            request.Headers.Add("sec-fetch-dest", "document");
-            request.Headers.Add("sec-fetch-mode", "navigate");
-            request.Headers.Add("sec-fetch-site", "same-origin");
-            request.Headers.Add("sec-fetch-user", "?1");
-            request.Headers.Add("upgrade-insecure-requests", "1");
-            request.Headers.Add("user-agent", ua);
-            request.Headers.Add("viewport-width", "709");
-            collection = new List<KeyValuePair<string, string>>();
-            collection.Add(new("fb_dtsg", "V87tjjmjz7Y="));
-            collection.Add(new("jazoest", "21067"));
-            collection.Add(new("checkpoint_data", ""));
-            collection.Add(new("approvals_code", "654321"));
-            collection.Add(new("codes_submitted", "0"));
-            collection.Add(new("submit[Submit Code]", "Submit Code"));
-            collection.Add(new("nh", "a2d4e73a12af73bff1325cd14a25520bc8aecd05"));
-            var content = new FormUrlEncodedContent(collection);
-            request.Content = content;
-            var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var data2 = await response.Content.ReadAsStringAsync();
-
-
-
         }
         catch (Exception e)
         {
             Crashes.TrackError(e);
         }
 
-        return string.Empty;
+        return String.Empty;
     }
 }

@@ -26,6 +26,11 @@ public class AccountInfoRepository : IAccountInfoRepository
         _database.EnableWriteAheadLoggingAsync();
     }
 
+    public Task<AccountInfo> GetAccountNewAsync()
+    {
+        return _database.FindAsync<AccountInfo>(x => x.Status == 0);
+    }
+
     public Task<int> AddAccountAsync(AccountInfo account)
     {
         return _database.InsertOrReplaceAsync(account);

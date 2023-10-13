@@ -2,6 +2,7 @@
 
 public interface IAccountInfoRepository
 {
+    Task<AccountInfo> GetAccountNewAsync();
     Task<int> AddAccountAsync(AccountInfo account);
 
     Task<int> AddAccountsAsync(IEnumerable<AccountInfo> accounts);

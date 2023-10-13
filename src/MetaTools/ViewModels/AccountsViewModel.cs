@@ -1,15 +1,18 @@
-﻿namespace MetaTools.ViewModels
+﻿using MetaTools.Services.Account;
+
+namespace MetaTools.ViewModels
 {
     public class AccountsViewModel : RegionViewModelBase
     {
         private string _accounts;
         private string _pathOpenFileName;
         private ObservableCollection<AccountInfo> _accountInfos = new ObservableCollection<AccountInfo>();
-        private readonly IAccountInfoRepository _accountInfoRepository;
         private readonly IUserAgentService _userAgentService;
         private bool _isBusy;
         private Visibility _visibility1 = Visibility.Hidden;
         private Visibility _visibility = Visibility.Visible;
+        private readonly IAccountService _accountService;
+
         public ICommand ResetInputCommand { get; private set; }
 
         public string Accounts
@@ -64,10 +67,10 @@
             set => SetProperty(ref _visibility1, value);
         }
 
-        public AccountsViewModel(IRegionManager regionManager, IAccountInfoRepository accountInfoRepository, IUserAgentService userAgentService) : base(regionManager)
+        public AccountsViewModel(IRegionManager regionManager, IUserAgentService userAgentService, IAccountService accountService) : base(regionManager)
         {
-            _accountInfoRepository = accountInfoRepository;
             _userAgentService = userAgentService;
+            _accountService = accountService;
             Analytics.TrackEvent("AccountsViewModel");
             ResetInputCommand = new DelegateCommand(ResetInput);
             OpenfileCommand = new DelegateCommand(Openfile);
@@ -86,7 +89,7 @@
         /// <returns></returns>
         private async Task GetAccounts()
         {
-            var data = await _accountInfoRepository.GetAllAccountsAsync();
+            var data = await _accountService.GetAllAsync();
             if (data != null && data.Any())
             {
                 AccountInfos = new ObservableCollection<AccountInfo>(data);
@@ -130,7 +133,7 @@
                     {
                         Uid = ls[0],
                         Password = ls[1],
-                        TwoFaCode = ls[2],
+                        SecretKey2Fa = ls[2],
                         Email = ls[3],
                         EmailPassword = ls[4],
                         Useragent = ua.Ua,
@@ -138,7 +141,8 @@
                         DateChange = DateTime.Now.ToString("G"),
                     };
                 }
-                await _accountInfoRepository.AddAccountAsync(acc);
+
+                await _accountService.AddAsync(acc);
             }
 
             await GetAccounts();
