@@ -1,5 +1,4 @@
-﻿using MetaTools.Services.Account;
-using MetaTools.Services.Facebook;
+﻿using MetaTools.Services.Facebook;
 using MetaTools.Services.TwoFactorAuthentication;
 
 namespace MetaTools
@@ -9,46 +8,15 @@ namespace MetaTools
     /// </summary>
     public partial class App
     {
-        public App()
-        {
-            var builder = WebApplication.CreateBuilder();
-
-            // Add services to the container.
-
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-            builder.Services.AddHostedService<AccountBackgroundTask>();
-            builder.Services.AddSingleton<IAccountInfoRepository, AccountInfoRepository>();
-            builder.Services.AddSingleton<IRequestProvider, RequestProvider.RequestProvider>();
-            builder.Services.AddSingleton<IFacebookService, FacebookService>();
-            builder.Services.AddSingleton<ITwoFactorAuthentication, TwoFactorAuthentication>();
-            builder.Services.AddSingleton<IAccountService, AccountService>();
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment() || app.Environment.IsProduction() || app.Environment.IsStaging())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            app.RunAsync();
-        }
-
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
             AppCenter.Start("1eaba9dd-3cb4-40c0-8757-124b3b247488",
                 typeof(Analytics), typeof(Crashes));
+            Crashes.SetEnabledAsync(true);
+
+            var task = Container.Resolve<IBackgroundTaskService>();
+            task.StartAsync(new CancellationToken());
         }
 
         protected override Window CreateShell()
@@ -70,6 +38,7 @@ namespace MetaTools
             containerRegistry.RegisterSingleton<IFacebookService, FacebookService>();
             containerRegistry.RegisterSingleton<ITwoFactorAuthentication, TwoFactorAuthentication>();
             containerRegistry.RegisterSingleton<IAccountService, AccountService>();
+            containerRegistry.RegisterSingleton<IBackgroundTaskService, BackgroundTaskService>();
         }
     }
 }

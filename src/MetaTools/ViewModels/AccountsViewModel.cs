@@ -1,4 +1,4 @@
-﻿using MetaTools.Services.Account;
+﻿using MetaTools.Event;
 
 namespace MetaTools.ViewModels
 {
@@ -12,7 +12,7 @@ namespace MetaTools.ViewModels
         private Visibility _visibility1 = Visibility.Hidden;
         private Visibility _visibility = Visibility.Visible;
         private readonly IAccountService _accountService;
-
+        private readonly IEventAggregator _eventAggregator;
         public ICommand ResetInputCommand { get; private set; }
 
         public string Accounts
@@ -67,20 +67,37 @@ namespace MetaTools.ViewModels
             set => SetProperty(ref _visibility1, value);
         }
 
-        public AccountsViewModel(IRegionManager regionManager, IUserAgentService userAgentService, IAccountService accountService) : base(regionManager)
+        public AccountsViewModel(IRegionManager regionManager, IUserAgentService userAgentService, IAccountService accountService, IEventAggregator ea, IEventAggregator eventAggregator) : base(regionManager)
         {
             _userAgentService = userAgentService;
             _accountService = accountService;
+            _eventAggregator = eventAggregator;
             Analytics.TrackEvent("AccountsViewModel");
             ResetInputCommand = new DelegateCommand(ResetInput);
             OpenfileCommand = new DelegateCommand(Openfile);
             AddAccountsCommand = new DelegateCommand(AddAccounts);
         }
 
+        private void UpdateAccount(AccountInfo obj)
+        {
+            var acc = AccountInfos.FirstOrDefault(x => x.Uid == obj.Uid);
+            if (acc != null)
+            {
+                acc.UpdateAccount(obj);
+            }
+        }
+
         public override async void OnNavigatedTo(NavigationContext navigationContext)
         {
             base.OnNavigatedTo(navigationContext);
+            _eventAggregator.GetEvent<UpdateAccountEvent>().Subscribe(UpdateAccount);
             await GetAccounts();
+        }
+
+        public override void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            base.OnNavigatedFrom(navigationContext);
+            _eventAggregator.GetEvent<UpdateAccountEvent>().Unsubscribe(UpdateAccount);
         }
 
         /// <summary>
@@ -110,18 +127,20 @@ namespace MetaTools.ViewModels
             var lsAccounts = Accounts.Split("\n", StringSplitOptions.RemoveEmptyEntries);
             foreach (var account in lsAccounts)
             {
-                var ua = await _userAgentService.Generate();
+                var ua = _userAgentService.Generate();
                 AccountInfo acc;
                 if (account.Contains("c_user="))
                 {
                     var uid = account.Split("c_user=")[1].Trim().Split(";")[0].Trim();
                     acc = new AccountInfo()
                     {
+                        Sex = -1,
                         Uid = uid,
                         Cookie = account,
+                        Status = 0,
                         DateCreate = DateTime.Now.ToString("G"),
                         DateChange = DateTime.Now.ToString("G"),
-                        Useragent = ua.Ua,
+                        Useragent = ua,
                     };
                 }
                 else
@@ -131,12 +150,14 @@ namespace MetaTools.ViewModels
                     string[] ls = account.Split("|");
                     acc = new AccountInfo()
                     {
+                        Sex = -1,
+                        Status = 0,
                         Uid = ls[0],
                         Password = ls[1],
                         SecretKey2Fa = ls[2],
                         Email = ls[3],
                         EmailPassword = ls[4],
-                        Useragent = ua.Ua,
+                        Useragent = ua,
                         DateCreate = DateTime.Now.ToString("G"),
                         DateChange = DateTime.Now.ToString("G"),
                     };

@@ -2,5 +2,6 @@
 
 public interface IUserAgentService
 {
-    Task<UserAgentModel> Generate();
+    string Generate();
+    Dictionary<string, string> FakeBrowserHeadersApi(string ua, Dictionary<string, string> dic = null);
 }

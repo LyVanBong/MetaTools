@@ -2,6 +2,7 @@
 
 public interface IAccountService
 {
+    Task GetAccessTokenEaabAsync();
     /// <summary>
     /// Lấy cookie tài khoản
     /// </summary>

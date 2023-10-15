@@ -1,4 +1,5 @@
-﻿using MetaTools.Services.Facebook;
+﻿using MetaTools.Event;
+using MetaTools.Services.Facebook;
 
 namespace MetaTools.Services.Account;
 
@@ -6,33 +7,57 @@ public class AccountService : IAccountService
 {
     private readonly IAccountInfoRepository _accountInfoRepository;
     private readonly IFacebookService _facebookService;
+    private readonly IEventAggregator _eventAggregator;
 
-    public AccountService(IAccountInfoRepository accountInfoRepository, IFacebookService facebookService)
+    public AccountService(IAccountInfoRepository accountInfoRepository, IFacebookService facebookService, IEventAggregator eventAggregator)
     {
         _accountInfoRepository = accountInfoRepository;
         _facebookService = facebookService;
+        _eventAggregator = eventAggregator;
+    }
+
+    public async Task GetAccessTokenEaabAsync()
+    {
+        var acc = await _accountInfoRepository.GetAccountsByStatusAsync(status: 4);
+        if (acc != null)
+        {
+            _ = UpdateAccount(acc, 7);
+            var token = _facebookService.GetAccessTokenEaab(acc.Cookie, acc.Useragent);
+            if (string.IsNullOrEmpty(token))
+            {
+                _ = UpdateAccount(acc, -1);
+            }
+            else
+            {
+                acc.Token = token;
+                _ = UpdateAccount(acc, 8);
+            }
+        }
+    }
+
+    private async Task UpdateAccount(AccountInfo acc, int status)
+    {
+        acc.Status = status;
+        acc.DateChange = DateTime.Now.ToString("G");
+        await _accountInfoRepository.AddAccountAsync(acc);
+        _eventAggregator.GetEvent<UpdateAccountEvent>().Publish(acc);
     }
 
     public async Task GetCookieAsync()
     {
-        var acc = await _accountInfoRepository.GetAccountNewAsync();
+        var acc = await _accountInfoRepository.GetAccountsByStatusAsync();
         if (acc != null)
         {
-            acc.Status = 1;
-            acc.DateChange = DateTime.Now.ToString("G");
-            await _accountInfoRepository.AddAccountAsync(acc);
-            var cookie = await _facebookService.Login(acc.Email, acc.Password, acc.SecretKey2Fa, acc.Useragent, acc.Proxy);
+            _ = UpdateAccount(acc, 1);
+            var cookie = _facebookService.Login(acc.Uid, acc.Password, acc.SecretKey2Fa, acc.Useragent, acc.Proxy);
             if (string.IsNullOrEmpty(cookie))
             {
-                acc.Status = 0;
-                acc.DateChange = DateTime.Now.ToString("G");
-                await _accountInfoRepository.AddAccountAsync(acc);
+                _ = UpdateAccount(acc, 6);
             }
             else
             {
                 acc.Cookie = cookie;
-                acc.DateChange = DateTime.Now.ToString("G");
-                await _accountInfoRepository.AddAccountAsync(acc);
+                _ = UpdateAccount(acc, 4);
             }
         }
     }

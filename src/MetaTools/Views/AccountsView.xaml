@@ -75,7 +75,7 @@
                 <DataGridTextColumn Binding="{Binding Email}" Header="Email" />
                 <DataGridTextColumn Binding="{Binding Token}" Header="Token" />
                 <DataGridTextColumn Binding="{Binding Cookie}" Header="Cookie" />
-                <DataGridTextColumn Binding="{Binding TwoFaCode}" Header="2FA" />
+                <DataGridTextColumn Binding="{Binding SecretKey2Fa}" Header="2FA" />
                 <DataGridTextColumn Binding="{Binding Useragent}" Header="UA" />
                 <DataGridTextColumn Binding="{Binding Proxy}" Header="Proxy" />
                 <DataGridTextColumn Binding="{Binding EmailPassword}" Header="Email Pass" />

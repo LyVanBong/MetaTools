@@ -2,7 +2,7 @@
 
 public class AccountInfo : BindableBase
 {
-    private bool _isSeclected;
+    private bool _isSelected;
     private string _uid;
     private string _name;
     private string _token;
@@ -25,11 +25,18 @@ public class AccountInfo : BindableBase
     private int _accountType;
     private string _sexText;
     private string _statusText;
+    private string _accountTypeText;
 
     public int AccountType
     {
         get => _accountType;
         set => SetProperty(ref _accountType, value);
+    }
+
+    public string AccountTypeText
+    {
+        get => _accountTypeText;
+        set => SetProperty(ref _accountTypeText, value);
     }
 
     public string DateChange
@@ -56,10 +63,10 @@ public class AccountInfo : BindableBase
         set => SetProperty(ref _emailPassword, value);
     }
 
-    public bool IsSeclected
+    public bool IsSelected
     {
-        get => _isSeclected;
-        set => SetProperty(ref _isSeclected, value);
+        get => _isSelected;
+        set => SetProperty(ref _isSelected, value);
     }
 
     [PrimaryKey]
@@ -160,7 +167,6 @@ public class AccountInfo : BindableBase
         get => _proxy;
         set => SetProperty(ref _proxy, value);
     }
-
     public int Status
     {
         get => _status;
@@ -186,9 +192,17 @@ public class AccountInfo : BindableBase
                 case 5:
                     StatusText = "Get Cookie P5 Done";
                     break;
-               
                 case 3:
                     StatusText = "Live";
+                    break;
+                case 6:
+                    StatusText = "Account or password wrong";
+                    break;
+                case 7:
+                    StatusText = "Get AccessToken Eaab";
+                    break;
+                case 8:
+                    StatusText = "Get AccessToken Eaab Done";
                     break;
                 default:
                     StatusText = "New";
@@ -207,5 +221,31 @@ public class AccountInfo : BindableBase
     {
         get => _descriptions;
         set => SetProperty(ref _descriptions, value);
+    }
+
+    public AccountInfo()
+    {
+
+    }
+    public void UpdateAccount(AccountInfo acc)
+    {
+        Name = acc.Name;
+        Token = acc.Token;
+        Cookie = acc.Cookie;
+        TotalFriends = acc.TotalFriends;
+        TotalGroups = acc.TotalGroups;
+        TotalPages = acc.TotalPages;
+        Birthday = acc.Birthday;
+        Sex = acc.Sex;
+        Password = acc.Password;
+        SecretKey2Fa = acc.SecretKey2Fa;
+        Useragent = acc.Useragent;
+        Proxy = acc.Proxy;
+        Status = acc.Status;
+        Descriptions = acc.Descriptions;
+        Email = acc.Email;
+        EmailPassword = acc.EmailPassword;
+        DateChange = acc.DateChange;
+        AccountType = acc.AccountType;
     }
 }
