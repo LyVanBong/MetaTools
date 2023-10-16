@@ -3,6 +3,13 @@
 public interface IFacebookService
 {
     /// <summary>
+    /// Kiểm tra check point
+    /// </summary>
+    /// <param name="cookie"></param>
+    /// <param name="ua"></param>
+    /// <returns></returns>
+    (bool CheckPoint, string CheckPointType) CheckPoint(string cookie, string ua);
+    /// <summary>
     /// Lấy thông tin tài khoản
     /// </summary>
     /// <param name="accountId"></param>
@@ -10,7 +17,7 @@ public interface IFacebookService
     /// <param name="accessToken"></param>
     /// <param name="ua"></param>
     /// <returns></returns>
-    Task<FacebookeInfoModel> GetAccountInfo(string accountId, string cookie, string accessToken,string ua);
+    Task<FacebookeInfoModel> GetAccountInfo(string accountId, string cookie, string accessToken, string ua);
     /// <summary>
     /// Get accesstoken eaab2 by insta
     /// </summary>

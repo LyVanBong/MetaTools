@@ -16,12 +16,32 @@ public class AccountService : IAccountService
         _eventAggregator = eventAggregator;
     }
 
+    public async Task CheckPoint()
+    {
+        var acc = await _accountInfoRepository.GetAccountsByStatusAsync(status: 4);
+        if (acc != null)
+        {
+            Analytics.TrackEvent("Check Point", new Dictionary<string, string>() { { "UID", acc.Uid } });
+            _ = UpdateAccount(acc, 12);
+            var checkPoint = _facebookService.CheckPoint(acc.Cookie, acc.Useragent);
+            if (checkPoint.CheckPoint)
+            {
+                acc.Descriptions = checkPoint.CheckPointType;
+                _ = UpdateAccount(acc, -1);
+            }
+            else
+            {
+                _ = UpdateAccount(acc, 3);
+            }
+        }
+    }
+
     public async Task GetAccountInfoAsync()
     {
         var acc = await _accountInfoRepository.GetAccountsByStatusAsync(status: 11);
         if (acc != null)
         {
-            Analytics.TrackEvent("Get Account Info");
+            Analytics.TrackEvent("Get Account Info", new Dictionary<string, string>() { { "UID", acc.Uid } });
 
             _ = UpdateAccount(acc, 9);
             var info = await _facebookService.GetAccountInfo(acc.Uid, acc.Cookie, acc.TokenPageEaab, acc.Useragent);
@@ -56,7 +76,7 @@ public class AccountService : IAccountService
         var acc = await _accountInfoRepository.GetAccountsByStatusAsync(status: 4);
         if (acc != null)
         {
-            Analytics.TrackEvent("Get Access Token Page Eaab");
+            Analytics.TrackEvent("Get Access Token Page Eaab", new Dictionary<string, string>() { { "UID", acc.Uid } });
             _ = UpdateAccount(acc, 7);
             var token = _facebookService.GetAccessTokenEaab(acc.Cookie, acc.Useragent);
             if (string.IsNullOrEmpty(token))
@@ -76,7 +96,7 @@ public class AccountService : IAccountService
         var acc = await _accountInfoRepository.GetAccountsByStatusAsync(status: 8);
         if (acc != null)
         {
-            Analytics.TrackEvent("Get Access Token User Eaab");
+            Analytics.TrackEvent("Get Access Token User Eaab", new Dictionary<string, string>() { { "UID", acc.Uid } });
             _ = UpdateAccount(acc, 10);
             var token = _facebookService.GetAccessTokenEaab2(acc.Cookie, acc.Useragent);
             if (string.IsNullOrEmpty(token))
@@ -104,7 +124,7 @@ public class AccountService : IAccountService
         var acc = await _accountInfoRepository.GetAccountsByStatusAsync();
         if (acc != null)
         {
-            Analytics.TrackEvent("Get Cookie");
+            Analytics.TrackEvent("Get Cookie", new Dictionary<string, string>() { { "UID", acc.Uid } });
             _ = UpdateAccount(acc, 1);
             var cookie = _facebookService.Login(acc.Uid, acc.Password, acc.SecretKey2Fa, acc.Useragent, acc.Proxy);
             if (string.IsNullOrEmpty(cookie))

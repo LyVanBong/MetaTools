@@ -3,6 +3,11 @@
 public interface IAccountService
 {
     /// <summary>
+    /// Kiểm tra check point tài khoản
+    /// </summary>
+    /// <returns></returns>
+    Task CheckPoint();
+    /// <summary>
     /// Lấy thông tin tài khoản
     /// </summary>
     /// <returns></returns>

@@ -1,9 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
-
+﻿using MetaTools.Consoles;
 using System.Diagnostics;
-using System.Net;
-using System.Text.Json;
-using MetaTools.Consoles;
 
 Console.WriteLine("Hello, World!");
 
@@ -17,6 +13,8 @@ var cookie = await FacebookeHelper.Login(email, pass, code2fa, ua);
 
 //var token =  FacebookeHelper.GetTokenEAAB(cookie, ua);
 
-var token = await FacebookeHelper.GetAccessTokenEaab(cookie, ua);
+//var token = await FacebookeHelper.GetAccessTokenEaab(cookie, ua);
+
+var checkPoint =  FacebookeHelper.CheckPoint(cookie, ua);
 
 Debug.WriteLine("Done");

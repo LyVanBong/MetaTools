@@ -23,11 +23,13 @@ public class BackgroundTaskService : IBackgroundTaskService
 
         _accountService.GetCookieAsync();
 
-        _accountService.GetAccessTokenPageEaabAsync();
+        _accountService.CheckPoint();
 
-        _accountService.GetAccessTokenUserEaabAsync();
+        //_accountService.GetAccessTokenPageEaabAsync();
 
-        _accountService.GetAccountInfoAsync();
+        //_accountService.GetAccessTokenUserEaabAsync();
+
+        //_accountService.GetAccountInfoAsync();
     }
     public Task StopAsync(CancellationToken stoppingToken)
     {

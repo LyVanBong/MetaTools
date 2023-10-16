@@ -7,6 +7,37 @@ namespace MetaTools.Consoles;
 
 public class FacebookeHelper
 {
+    public static bool CheckPoint(string cookie, string ua)
+    {
+        using (HttpRequest request = new HttpRequest())
+        {
+            request.AddHeader("authority", "adsmanager.facebook.com");
+            request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            request.AddHeader("accept-language", "en-US,en;q=0.9");
+            request.AddHeader("cookie", cookie);
+            request.AddHeader("User-Agent", ua);
+            request.AddHeader("dpr", "1");
+            request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+            request.AddHeader("sec-ch-ua-mobile", "?0");
+            request.AddHeader("sec-ch-ua-model", "\"\"");
+            request.AddHeader("sec-fetch-dest", "document");
+            request.AddHeader("sec-fetch-mode", "navigate");
+            request.AddHeader("sec-fetch-site", "same-origin");
+            request.AddHeader("upgrade-insecure-requests", "1");
+            request.AddHeader("viewport-width", Random.Shared.Next(500, 1800) + "");
+
+            var respone = request.Get("https://www.facebook.com/");
+
+            var url = respone.Address.AbsoluteUri;
+
+            if (url.Contains("checkpoint"))
+            {
+                return true;
+            }
+
+        }
+        return false;
+    }
 
     public static async Task<string> GetAccessTokenEaab(string cookie, string ua)
     {

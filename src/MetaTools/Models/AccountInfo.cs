@@ -220,6 +220,9 @@ public class AccountInfo : BindableBase
                 case 11:
                     StatusText = "Get AccessToken User Eaab Done";
                     break;
+                case 12:
+                    StatusText = "CheckPoint";
+                    break;
                 default:
                     StatusText = "New";
                     break;
