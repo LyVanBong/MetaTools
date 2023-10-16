@@ -3,6 +3,22 @@
 public interface IFacebookService
 {
     /// <summary>
+    /// Lấy thông tin tài khoản
+    /// </summary>
+    /// <param name="accountId"></param>
+    /// <param name="cookie"></param>
+    /// <param name="accessToken"></param>
+    /// <param name="ua"></param>
+    /// <returns></returns>
+    Task<FacebookeInfoModel> GetAccountInfo(string accountId, string cookie, string accessToken,string ua);
+    /// <summary>
+    /// Get accesstoken eaab2 by insta
+    /// </summary>
+    /// <param name="cookie"></param>
+    /// <param name="ua"></param>
+    /// <returns></returns>
+    string GetAccessTokenEaab2(string cookie, string ua);
+    /// <summary>
     /// Get AccessToken EAAB
     /// </summary>
     /// <param name="cookie"></param>

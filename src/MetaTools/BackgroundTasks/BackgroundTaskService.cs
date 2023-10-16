@@ -24,6 +24,8 @@ public class BackgroundTaskService : IBackgroundTaskService
         _accountService.GetCookieAsync();
 
         _accountService.GetAccessTokenEaabAsync();
+
+        _accountService.GetAccountInfoAsync();
     }
     public Task StopAsync(CancellationToken stoppingToken)
     {

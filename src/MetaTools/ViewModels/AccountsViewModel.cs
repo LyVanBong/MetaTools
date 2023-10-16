@@ -115,75 +115,90 @@ namespace MetaTools.ViewModels
 
         private async void AddAccounts()
         {
-            Analytics.TrackEvent("AddAccounts");
-            if (string.IsNullOrEmpty(Accounts))
+            try
             {
-                MessageBox.Show("Input empty", "Notification", MessageBoxButton.OK);
-                return;
-            }
-            if (IsBusy) return;
-            IsBusy = true;
-
-            var lsAccounts = Accounts.Split("\n", StringSplitOptions.RemoveEmptyEntries);
-            foreach (var account in lsAccounts)
-            {
-                var ua = _userAgentService.Generate();
-                AccountInfo acc;
-                if (account.Contains("c_user="))
+                Analytics.TrackEvent("AddAccounts");
+                if (string.IsNullOrEmpty(Accounts))
                 {
-                    var uid = account.Split("c_user=")[1].Trim().Split(";")[0].Trim();
-                    acc = new AccountInfo()
-                    {
-                        Sex = -1,
-                        Uid = uid,
-                        Cookie = account,
-                        Status = 0,
-                        DateCreate = DateTime.Now.ToString("G"),
-                        DateChange = DateTime.Now.ToString("G"),
-                        Useragent = ua,
-                    };
-                }
-                else
-                {
-                    // 100055508814356|XP78ghymfw81951|N4A2PDIGF5UYBQ6L5PEBOI2KSJ5YCTBW|rebeccacutsingerv@hotmail.com|Mailmmo920
-
-                    string[] ls = account.Split("|");
-                    acc = new AccountInfo()
-                    {
-                        Sex = -1,
-                        Status = 0,
-                        Uid = ls[0],
-                        Password = ls[1],
-                        SecretKey2Fa = ls[2],
-                        Email = ls[3],
-                        EmailPassword = ls[4],
-                        Useragent = ua,
-                        DateCreate = DateTime.Now.ToString("G"),
-                        DateChange = DateTime.Now.ToString("G"),
-                    };
+                    MessageBox.Show("Input empty", "Notification", MessageBoxButton.OK);
+                    return;
                 }
 
-                await _accountService.AddAsync(acc);
-            }
+                if (IsBusy) return;
+                IsBusy = true;
 
-            await GetAccounts();
-            ResetInput();
-            MessageBox.Show("Add account done", "Notification", MessageBoxButton.OK);
-            IsBusy = false;
+                var lsAccounts = Accounts.Split("\n", StringSplitOptions.RemoveEmptyEntries);
+                foreach (var account in lsAccounts)
+                {
+                    var ua = _userAgentService.Generate();
+                    AccountInfo acc;
+                    if (account.Contains("c_user="))
+                    {
+                        var uid = account.Split("c_user=")[1].Trim().Split(";")[0].Trim();
+                        acc = new AccountInfo()
+                        {
+                            Sex = -1,
+                            Uid = uid,
+                            Cookie = account,
+                            Status = 0,
+                            DateCreate = DateTime.Now.ToString("G"),
+                            DateChange = DateTime.Now.ToString("G"),
+                            Useragent = ua,
+                        };
+                    }
+                    else
+                    {
+                        // 100055508814356|XP78ghymfw81951|N4A2PDIGF5UYBQ6L5PEBOI2KSJ5YCTBW|rebeccacutsingerv@hotmail.com|Mailmmo920
+
+                        string[] ls = account.Split("|");
+                        acc = new AccountInfo()
+                        {
+                            Sex = -1,
+                            Status = 0,
+                            Uid = ls[0],
+                            Password = ls[1],
+                            SecretKey2Fa = ls[2],
+                            Email = ls[3],
+                            EmailPassword = ls[4],
+                            Useragent = ua,
+                            DateCreate = DateTime.Now.ToString("G"),
+                            DateChange = DateTime.Now.ToString("G"),
+                        };
+                    }
+
+                    await _accountService.AddAsync(acc);
+                }
+
+                await GetAccounts();
+                ResetInput();
+                MessageBox.Show("Add account done", "Notification", MessageBoxButton.OK);
+                IsBusy = false;
+            }
+            catch (Exception e)
+            {
+                Crashes.TrackError(e);
+            }
         }
 
         private void Openfile()
         {
-            Analytics.TrackEvent("Openfile");
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Open File Accounts";
-            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            if (openFileDialog.ShowDialog() == true)
+            try
             {
-                PathOpenFileName = openFileDialog.FileName;
-                var readFile = File.ReadAllText(PathOpenFileName);
-                Accounts = readFile.Trim() + "\n" + Accounts;
+                Analytics.TrackEvent("Openfile");
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Title = "Open File Accounts";
+                openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    PathOpenFileName = openFileDialog.FileName;
+                    var readFile = File.ReadAllText(PathOpenFileName);
+                    Accounts = readFile.Trim() + "\n" + Accounts;
+                }
+            }
+            catch (Exception e)
+            {
+                Crashes.TrackError(e);
             }
         }
 

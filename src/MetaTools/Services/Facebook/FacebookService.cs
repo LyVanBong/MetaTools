@@ -6,12 +6,49 @@ namespace MetaTools.Services.Facebook;
 public class FacebookService : IFacebookService
 {
     private readonly ITwoFactorAuthentication _twoFactorAuthentication;
-    private readonly IUserAgentService _userAgentService;
 
-    public FacebookService(ITwoFactorAuthentication twoFactorAuthentication, IUserAgentService userAgentService)
+    public FacebookService(ITwoFactorAuthentication twoFactorAuthentication)
     {
         _twoFactorAuthentication = twoFactorAuthentication;
-        _userAgentService = userAgentService;
+    }
+
+    public async Task<FacebookeInfoModel> GetAccountInfo(string accountId, string cookie, string accessToken, string ua)
+    {
+        try
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(System.Net.Http.HttpMethod.Get, "https://graph.facebook.com/v17.0/" + accountId + "?fields=name,gender,friends.limit(10)&access_token=" + accessToken);
+            request.Headers.Add("authority", "graph.facebook.com");
+            request.Headers.Add("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            request.Headers.Add("accept-language", "en-US,en;q=0.9,vi;q=0.8");
+            request.Headers.Add("cache-control", "max-age=0");
+            request.Headers.Add("cookie", cookie);
+            request.Headers.Add("sec-ch-ua-mobile", "?0");
+            request.Headers.Add("sec-fetch-dest", "document");
+            request.Headers.Add("sec-fetch-mode", "navigate");
+            request.Headers.Add("sec-fetch-site", "none");
+            request.Headers.Add("sec-fetch-user", "?1");
+            request.Headers.Add("upgrade-insecure-requests", "1");
+            request.Headers.Add("user-agent", ua);
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+
+            return JsonSerializer.Deserialize<FacebookeInfoModel>(json);
+
+        }
+        catch (Exception e)
+        {
+
+            Crashes.TrackError(e);
+        }
+
+        return null;
+    }
+
+    public string GetAccessTokenEaab2(string cookie, string ua)
+    {
+        throw new NotImplementedException();
     }
 
     public string GetAccessTokenEaab(string cookie, string ua)

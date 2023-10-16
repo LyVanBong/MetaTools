@@ -1,5 +1,6 @@
 ﻿using MetaTools.Event;
 using MetaTools.Services.Facebook;
+using Newtonsoft.Json.Linq;
 
 namespace MetaTools.Services.Account;
 
@@ -14,6 +15,39 @@ public class AccountService : IAccountService
         _accountInfoRepository = accountInfoRepository;
         _facebookService = facebookService;
         _eventAggregator = eventAggregator;
+    }
+
+    public async Task GetAccountInfoAsync()
+    {
+        var acc = await _accountInfoRepository.GetAccountsByStatusAsync(status: 8);
+        if (acc != null)
+        {
+            _ = UpdateAccount(acc, 9);
+            var info = await _facebookService.GetAccountInfo(acc.Uid, acc.Cookie, acc.Token, acc.Useragent);
+            if (info == null)
+            {
+                _ = UpdateAccount(acc, -1);
+            }
+            else
+            {
+                acc.Name = info.name;
+                if (info.gender.ToUpper() == "MALE")
+                {
+                    acc.Sex = 0;
+                }
+                else if (info.gender.ToUpper() == "FEMALE")
+                {
+                    acc.Sex = 1;
+                }
+                else
+                {
+                    acc.Sex = -1;
+                }
+
+                acc.TotalFriends = info.friends.summary.total_count;
+                _ = UpdateAccount(acc, 3);
+            }
+        }
     }
 
     public async Task GetAccessTokenEaabAsync()

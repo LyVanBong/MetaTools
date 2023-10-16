@@ -204,6 +204,9 @@ public class AccountInfo : BindableBase
                 case 8:
                     StatusText = "Get AccessToken Eaab Done";
                     break;
+                case 9:
+                    StatusText = "Get Account Info";
+                    break;
                 default:
                     StatusText = "New";
                     break;
