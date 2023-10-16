@@ -8,15 +8,27 @@ namespace MetaTools
     /// </summary>
     public partial class App
     {
-        protected override void OnStartup(StartupEventArgs e)
+        protected override  void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            // Config AppCenter
             AppCenter.Start("1eaba9dd-3cb4-40c0-8757-124b3b247488",
                 typeof(Analytics), typeof(Crashes));
-            Crashes.SetEnabledAsync(true);
 
+             AppCenter.SetEnabledAsync(true);
+             Crashes.SetEnabledAsync(true);
+             Analytics.SetEnabledAsync(true);
+
+             // Định danh app
+           var installId = AppCenter.GetInstallIdAsync();
+
+            // Tự đặt id
+            //AppCenter.SetUserId("your-user-id");
+
+            // Khởi tạo background service
             var task = Container.Resolve<IBackgroundTaskService>();
-            task.StartAsync(new CancellationToken());
+            task?.StartAsync(new CancellationToken());
         }
 
         protected override Window CreateShell()

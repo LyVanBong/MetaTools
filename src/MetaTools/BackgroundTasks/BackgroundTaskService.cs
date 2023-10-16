@@ -23,7 +23,9 @@ public class BackgroundTaskService : IBackgroundTaskService
 
         _accountService.GetCookieAsync();
 
-        _accountService.GetAccessTokenEaabAsync();
+        _accountService.GetAccessTokenPageEaabAsync();
+
+        _accountService.GetAccessTokenUserEaabAsync();
 
         _accountService.GetAccountInfoAsync();
     }

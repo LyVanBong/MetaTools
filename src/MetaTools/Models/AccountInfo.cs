@@ -5,7 +5,7 @@ public class AccountInfo : BindableBase
     private bool _isSelected;
     private string _uid;
     private string _name;
-    private string _token;
+    private string _tokenPageEaab;
     private string _cookie;
     private int _totalFriends;
     private int _totalGroups;
@@ -26,6 +26,7 @@ public class AccountInfo : BindableBase
     private string _sexText;
     private string _statusText;
     private string _accountTypeText;
+    private string _tokenUserEaab;
 
     public int AccountType
     {
@@ -82,10 +83,16 @@ public class AccountInfo : BindableBase
         set => SetProperty(ref _name, value);
     }
 
-    public string Token
+    public string TokenUserEaab
     {
-        get => _token;
-        set => SetProperty(ref _token, value);
+        get => _tokenUserEaab;
+        set => SetProperty(ref _tokenUserEaab, value);
+    }
+
+    public string TokenPageEaab
+    {
+        get => _tokenPageEaab;
+        set => SetProperty(ref _tokenPageEaab, value);
     }
 
     public string Cookie
@@ -199,13 +206,19 @@ public class AccountInfo : BindableBase
                     StatusText = "Account or password wrong";
                     break;
                 case 7:
-                    StatusText = "Get AccessToken Eaab";
+                    StatusText = "Get AccessToken Page Eaab";
                     break;
                 case 8:
-                    StatusText = "Get AccessToken Eaab Done";
+                    StatusText = "Get AccessToken Page Eaab Done";
                     break;
                 case 9:
                     StatusText = "Get Account Info";
+                    break;
+                case 10:
+                    StatusText = "Get AccessToken User Eaab";
+                    break;
+                case 11:
+                    StatusText = "Get AccessToken User Eaab Done";
                     break;
                 default:
                     StatusText = "New";
@@ -233,7 +246,7 @@ public class AccountInfo : BindableBase
     public void UpdateAccount(AccountInfo acc)
     {
         Name = acc.Name;
-        Token = acc.Token;
+        TokenPageEaab = acc.TokenPageEaab;
         Cookie = acc.Cookie;
         TotalFriends = acc.TotalFriends;
         TotalGroups = acc.TotalGroups;

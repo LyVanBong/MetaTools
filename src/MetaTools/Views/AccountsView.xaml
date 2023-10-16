@@ -73,7 +73,8 @@
                 <DataGridTextColumn Binding="{Binding Birthday}" Header="Birthday" />
                 <DataGridTextColumn Binding="{Binding Password}" Header="Password" />
                 <DataGridTextColumn Binding="{Binding Email}" Header="Email" />
-                <DataGridTextColumn Binding="{Binding Token}" Header="Token" />
+                <DataGridTextColumn Binding="{Binding TokenPage}" Header="Token Page" />
+                <DataGridTextColumn Binding="{Binding TokenUserEaab}" Header="Token User" />
                 <DataGridTextColumn Binding="{Binding Cookie}" Header="Cookie" />
                 <DataGridTextColumn Binding="{Binding SecretKey2Fa}" Header="2FA" />
                 <DataGridTextColumn Binding="{Binding Useragent}" Header="UA" />

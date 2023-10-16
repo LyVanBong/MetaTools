@@ -8,10 +8,15 @@ public interface IAccountService
     /// <returns></returns>
     Task GetAccountInfoAsync();
     /// <summary>
-    /// Lấy token eaab
+    /// Lấy token page eaab
     /// </summary>
     /// <returns></returns>
-    Task GetAccessTokenEaabAsync();
+    Task GetAccessTokenPageEaabAsync();
+    /// <summary>
+    /// Get token user eaab
+    /// </summary>
+    /// <returns></returns>
+    Task GetAccessTokenUserEaabAsync();
     /// <summary>
     /// Lấy cookie tài khoản
     /// </summary>
