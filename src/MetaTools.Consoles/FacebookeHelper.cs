@@ -1,12 +1,222 @@
-﻿using Leaf.xNet;
-using OtpNet;
-using System.Text.RegularExpressions;
-using System.Web;
-
-namespace MetaTools.Consoles;
+﻿namespace MetaTools.Consoles;
 
 public class FacebookeHelper
 {
+
+    public static async Task<string> CheckPoint_828281030927956(string cookie, string ua, string email, string passEmail)
+    {
+        using (HttpRequest request = new HttpRequest())
+        {
+            request.AddHeader("authority", "d.facebook.com");
+            request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            request.AddHeader("accept-language", "en-US,en;q=0.9");
+            request.AddHeader("cookie", cookie);
+            request.AddHeader("dpr", "1");
+            request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+            request.AddHeader("sec-ch-ua-mobile", "?0");
+            request.AddHeader("sec-ch-ua-model", "\"\"");
+            request.AddHeader("sec-fetch-dest", "document");
+            request.AddHeader("sec-fetch-mode", "navigate");
+            request.AddHeader("sec-fetch-site", "none");
+            request.AddHeader("sec-fetch-user", "?1");
+            request.AddHeader("upgrade-insecure-requests", "1");
+            request.AddHeader("user-agent", ua);
+            request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+
+            var response = request.Get("https://d.facebook.com/");
+
+            var html = response?.ToString();
+
+            if (html != null)
+            {
+                string url = Regex.Match(html, @"\/x\/checkpoint\/828281030927956\/stepper\/\?token=(.*?)""").Value;
+                if (url != null)
+                {
+                    url = "https://d.facebook.com" + url;
+                    url = HttpUtility.HtmlDecode(url);
+                    request.AddHeader("authority", "d.facebook.com");
+                    request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+                    request.AddHeader("accept-language", "en-US,en;q=0.9");
+                    request.AddHeader("cookie", cookie);
+                    request.AddHeader("dpr", "1");
+                    request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+                    request.AddHeader("sec-ch-ua-mobile", "?0");
+                    request.AddHeader("sec-ch-ua-model", "\"\"");
+                    request.AddHeader("sec-fetch-dest", "document");
+                    request.AddHeader("sec-fetch-mode", "navigate");
+                    request.AddHeader("sec-fetch-site", "none");
+                    request.AddHeader("sec-fetch-user", "?1");
+                    request.AddHeader("upgrade-insecure-requests", "1");
+                    request.AddHeader("user-agent", ua);
+                    request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+                    response = request.Get(url);
+                    html = response?.ToString();
+                    if (html != null)
+                    {
+                        url = Regex.Match(html, @"\/x\/checkpoint\/828281030927956\/anti_scripting\/\?token=(.*)""").Value;
+                        if (url != null)
+                        {
+                            url = "https://d.facebook.com" + url;
+                            url = HttpUtility.HtmlDecode(url);
+                            request.AddHeader("authority", "d.facebook.com");
+                            request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+                            request.AddHeader("accept-language", "en-US,en;q=0.9");
+                            request.AddHeader("cookie", cookie);
+                            request.AddHeader("dpr", "1");
+                            request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+                            request.AddHeader("sec-ch-ua-mobile", "?0");
+                            request.AddHeader("sec-ch-ua-model", "\"\"");
+                            request.AddHeader("sec-fetch-dest", "document");
+                            request.AddHeader("sec-fetch-mode", "navigate");
+                            request.AddHeader("sec-fetch-site", "none");
+                            request.AddHeader("sec-fetch-user", "?1");
+                            request.AddHeader("upgrade-insecure-requests", "1");
+                            request.AddHeader("user-agent", ua);
+                            request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+                            response = request.Get(url);
+                            html = response?.ToString();
+                            if (html != null)
+                            {
+                                url = Regex.Match(html, @"\/epsilon\/select_challenge\/async\/\?token=(.*?)""").Value;
+                                if (url != null)
+                                {
+                                    url = "https://d.facebook.com" + url;
+                                    url = HttpUtility.HtmlDecode(url);
+                                    request.AddHeader("authority", "d.facebook.com");
+                                    request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+                                    request.AddHeader("accept-language", "en-US,en;q=0.9");
+                                    request.AddHeader("cookie", cookie);
+                                    request.AddHeader("dpr", "1");
+                                    request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+                                    request.AddHeader("sec-ch-ua-mobile", "?0");
+                                    request.AddHeader("sec-ch-ua-model", "\"\"");
+                                    request.AddHeader("sec-fetch-dest", "document");
+                                    request.AddHeader("sec-fetch-mode", "navigate");
+                                    request.AddHeader("sec-fetch-site", "none");
+                                    request.AddHeader("sec-fetch-user", "?1");
+                                    request.AddHeader("upgrade-insecure-requests", "1");
+                                    request.AddHeader("user-agent", ua);
+                                    request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+
+                                    string fb_dtsg = Regex.Match(html, @"name=""fb_dtsg"" value=""(.*?)""").Groups[1]
+                                        .Value;
+                                    string jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1]
+                                        .Value;
+
+                                    var requestParams = new RequestParams();
+                                    requestParams["fb_dtsg"] = fb_dtsg;
+                                    requestParams["jazoest"] = jazoest;
+                                    requestParams["challenge"] = "email_captcha";
+
+                                    response = request.Post(url, requestParams);
+
+                                    html = response?.ToString();
+                                    if (html != null)
+                                    {
+                                        url = Regex.Match(html, @"/epsilon/sc/async/select/\?token=(.*?)""").Value;
+                                        if (url != null)
+                                        {
+                                            url = "https://d.facebook.com" + url;
+                                            url = HttpUtility.HtmlDecode(url);
+                                            request.AddHeader("authority", "d.facebook.com");
+                                            request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+                                            request.AddHeader("accept-language", "en-US,en;q=0.9");
+                                            request.AddHeader("cookie", cookie);
+                                            request.AddHeader("dpr", "1");
+                                            request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+                                            request.AddHeader("sec-ch-ua-mobile", "?0");
+                                            request.AddHeader("sec-ch-ua-model", "\"\"");
+                                            request.AddHeader("sec-fetch-dest", "document");
+                                            request.AddHeader("sec-fetch-mode", "navigate");
+                                            request.AddHeader("sec-fetch-site", "none");
+                                            request.AddHeader("sec-fetch-user", "?1");
+                                            request.AddHeader("upgrade-insecure-requests", "1");
+                                            request.AddHeader("user-agent", ua);
+                                            request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+
+                                            fb_dtsg = Regex.Match(html, @"name=""fb_dtsg"" value=""(.*?)""").Groups[1]
+                                               .Value;
+                                            jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1]
+                                               .Value;
+
+                                            requestParams = new RequestParams();
+                                            requestParams["fb_dtsg"] = fb_dtsg;
+                                            requestParams["jazoest"] = jazoest;
+                                            requestParams["index"] = "ec:0";
+
+                                            response = request.Post(url, requestParams);
+
+                                            html = response?.ToString();
+                                            if (html != null)
+                                            {
+                                                url = Regex.Match(html, @"/epsilon/sc/async/verify/\?token=(.*?)""")
+                                                    .Value;
+                                                if (url != null)
+                                                {
+                                                    url = "https://d.facebook.com" + url;
+                                                    url = HttpUtility.HtmlDecode(url);
+                                                    request.AddHeader("authority", "d.facebook.com");
+                                                    request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+                                                    request.AddHeader("accept-language", "en-US,en;q=0.9");
+                                                    request.AddHeader("cookie", cookie);
+                                                    request.AddHeader("dpr", "1");
+                                                    request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+                                                    request.AddHeader("sec-ch-ua-mobile", "?0");
+                                                    request.AddHeader("sec-ch-ua-model", "\"\"");
+                                                    request.AddHeader("sec-fetch-dest", "document");
+                                                    request.AddHeader("sec-fetch-mode", "navigate");
+                                                    request.AddHeader("sec-fetch-site", "none");
+                                                    request.AddHeader("sec-fetch-user", "?1");
+                                                    request.AddHeader("upgrade-insecure-requests", "1");
+                                                    request.AddHeader("user-agent", ua);
+                                                    request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+
+                                                    fb_dtsg = Regex.Match(html, @"name=""fb_dtsg"" value=""(.*?)""").Groups[1]
+                                                        .Value;
+                                                    jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1]
+                                                        .Value;
+
+                                                    var code = await EmailHelper.ReadEmailAsync(email, passEmail);
+
+                                                    requestParams = new RequestParams();
+                                                    requestParams["fb_dtsg"] = fb_dtsg;
+                                                    requestParams["jazoest"] = jazoest;
+                                                    requestParams["code"] = code;
+                                                    requestParams["data"] = "ec:0";
+
+                                                    response = request.Post(url, requestParams);
+
+                                                    html = response?.ToString();
+
+                                                    if (html != null)
+                                                    {
+                                                        // con buoc xac thuc thiet bi nua
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return string.Empty;
+    }
+
+    public static bool LikePost(string cookie, string ua)
+    {
+        using (HttpRequest request = new HttpRequest())
+        {
+
+        }
+
+        return false;
+    }
+
     public static bool CheckPoint(string cookie, string ua)
     {
         using (HttpRequest request = new HttpRequest())
@@ -63,8 +273,7 @@ public class FacebookeHelper
                 "https://www.facebook.com/dialog/oauth?scope=user_about_me,pages_read_engagement,user_actions.books,user_actions.fitness,user_actions.music,user_actions.news,user_actions.video,user_activities,user_birthday,user_education_history,user_events,user_friends,user_games_activity,user_groups,user_hometown,user_interests,user_likes,user_location,user_managed_groups,user_photos,user_posts,user_relationship_details,user_relationships,user_religion_politics,user_status,user_tagged_places,user_videos,user_website,user_work_history,email,manage_notifications,manage_pages,publish_actions,publish_pages,read_friendlists,read_insights,read_page_mailboxes,read_stream,rsvp_event,read_mailbox&response_type=token&client_id=124024574287414&redirect_uri=fb124024574287414://authorize/&sso_key=com&display=&fbclid=IwAR1KPwp2DVh2Cu7KdeANz-dRC_wYNjjHk5nR5F-BzGGj7-gTnKimAmeg08k");
 
             string html = response?.ToString();
-
-            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/index.html", html);
+            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/index1.html", html);
             if (html.Contains("encrypted_post_body"))
             {
                 string jazoest = Regex.Match(html, @"name=\\""jazoest\\"" value=\\""(.*?)\\""")?.Groups[1]?.Value;
