@@ -79,7 +79,6 @@
 
         public MainWindowViewModel(IRegionManager regionManager, IDialogService dialogService) : base(regionManager)
         {
-            Analytics.TrackEvent("MainWindowViewModel");
             _dialogService = dialogService;
             NavigationCommand = new DelegateCommand<MenuModel>((para) => NavigationAsync(para));
             _ = Initialization();
@@ -87,7 +86,8 @@
 
         private async Task Initialization()
         {
-            await Task.Delay(1000);
+            await Task.Delay(1);
+            Analytics.TrackEvent("MainWindowViewModel", new Dictionary<string, string>() { { "Identifier", await AppCenter.GetInstallIdAsync() + "" } });
             RegionManager.RequestNavigate("ContentRegion", nameof(DashboardView));
         }
 
