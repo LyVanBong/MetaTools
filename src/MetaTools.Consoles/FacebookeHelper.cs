@@ -3,6 +3,31 @@
 public class FacebookeHelper
 {
 
+    public static async Task<string[]> GetTokenPage(string token, string ua, string cookie)
+    {
+        var client = new HttpClient();
+        var request = new HttpRequestMessage(System.Net.Http.HttpMethod.Get, "https://graph.facebook.com/v18.0/me/accounts?access_token=" + token);
+        request.Headers.Add("authority", "graph.facebook.com");
+        request.Headers.Add("accept", "*/*");
+        request.Headers.Add("accept-language", "en-US,en;q=0.9,vi;q=0.8");
+        request.Headers.Add("origin", "https://developers.facebook.com");
+        request.Headers.Add("referer", "https://developers.facebook.com/");
+        request.Headers.Add("sec-ch-ua-mobile", "?0");
+        request.Headers.Add("sec-fetch-dest", "empty");
+        request.Headers.Add("sec-fetch-mode", "cors");
+        request.Headers.Add("sec-fetch-site", "same-site");
+        request.Headers.Add("user-agent", ua);
+        request.Headers.Add("Cookie", cookie);
+        var response = await client.SendAsync(request);
+        if (response != null)
+        {
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return Regex.Matches(json, @"""access_token"": ""(.*?)""").Select(x => x?.Groups[1]?.Value)?.ToArray();
+        }
+
+        return null;
+    }
     public static async Task<string> CheckPoint_828281030927956(string cookie, string ua, string email, string passEmail)
     {
         using (HttpRequest request = new HttpRequest())
@@ -207,11 +232,17 @@ public class FacebookeHelper
         return string.Empty;
     }
 
-    public static bool LikePost(string cookie, string ua)
+    public static async Task<bool> LikePost(string token)
     {
-        using (HttpRequest request = new HttpRequest())
-        {
+        var client = new HttpClient();
+        var request = new HttpRequestMessage(System.Net.Http.HttpMethod.Post, "https://graph.facebook.com/100027295904383_1358942941692223/likes?access_token=" + token);
+        var response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
 
+        if (content != null)
+        {
+            return bool.Parse(content);
         }
 
         return false;
@@ -412,7 +443,7 @@ public class FacebookeHelper
             request.AddHeader("cookie", cookie);
             request.AddHeader("User-Agent", ua);
 
-            var respone = request.Get("https://d.facebook.com/profile.php");
+            var respone = request.Get("https://d.facebook.com/profile.php"); 
 
             string html = respone?.ToString();
 

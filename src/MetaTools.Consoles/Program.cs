@@ -7,6 +7,7 @@ string email = "lnqopenny@hotmail.com";
 string passEmail = "u39hL7mt2x6";
 
 var cookie = await FacebookeHelper.Login(uid, pass, code2fa, ua);
+
 Console.WriteLine(cookie);
 if (string.IsNullOrEmpty(cookie))
 {
@@ -22,8 +23,26 @@ else
     }
     else
     {
-        Console.WriteLine(FacebookeHelper.GetTokenEAAB(cookie, ua));
-        Console.WriteLine(await FacebookeHelper.GetAccessTokenEaab(cookie, ua));
+        var tokenPage = FacebookeHelper.GetTokenEAAB(cookie, ua);
+        Console.WriteLine(tokenPage);
+        var tokenUser = await FacebookeHelper.GetAccessTokenEaab(cookie, ua);
+        Console.WriteLine(tokenUser);
+
+        var token = await FacebookeHelper.GetTokenPage(tokenUser, ua, cookie);
+
+        var like = await FacebookeHelper.LikePost(tokenUser);
+        if (like)
+        {
+            Console.WriteLine("Like Done");
+        }
+        foreach (var s in token)
+        {
+            like = await FacebookeHelper.LikePost(s);
+            if (like)
+            {
+                Console.WriteLine("Like Done");
+            }
+        }
     }
 }
 
