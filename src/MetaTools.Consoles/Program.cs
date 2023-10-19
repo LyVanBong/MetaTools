@@ -8,6 +8,6 @@ Console.OutputEncoding = Encoding.Unicode;
 
 #region Todo
 
-await PageFacebookeHelper.SendMessagerAsync();
+await PageHelper.SendMessagerAsync();
 
 #endregion

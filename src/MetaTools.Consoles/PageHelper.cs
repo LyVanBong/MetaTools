@@ -1,6 +1,6 @@
 ﻿namespace MetaTools.Consoles;
 
-public class PageFacebookeHelper
+public class PageHelper
 {
     public static async Task SendMessagerAsync()
     {
