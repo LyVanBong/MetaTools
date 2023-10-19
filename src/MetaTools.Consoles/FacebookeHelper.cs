@@ -6,7 +6,7 @@ public class FacebookeHelper
     {
         if (string.IsNullOrEmpty(url))
         {
-            url = "https://graph.facebook.com/v18.0/" + id + "?fields=conversations&access_token=" + token;
+            url = "https://graph.facebook.com/v18.0/" + id + "/conversations?limit=100&access_token=" + token;
         }
 
         var client = new HttpClient();
