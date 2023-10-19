@@ -1,49 +1,145 @@
-﻿Console.OutputEncoding = Encoding.Unicode;
-string uid = "100053489240893";
-string pass = "thieu123aA@";
-string code2fa = "HCIX RBJD T7CZ TB2T ITRT 66QX ZRT3 F5VN";
-string ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36";
-string email = "lnqopenny@hotmail.com";
-string passEmail = "u39hL7mt2x6";
-
-var cookie = await FacebookeHelper.Login(uid, pass, code2fa, ua);
-
-Console.WriteLine(cookie);
-if (string.IsNullOrEmpty(cookie))
+﻿try
 {
-    Console.WriteLine("Tk Mk sai");
-}
-else
-{
-    var checkPoint = FacebookeHelper.CheckPoint(cookie, ua);
-    if (checkPoint)
-    {
-        Console.WriteLine("Tài khoản bị checkpoint");
-        var unCheckPoint828 = FacebookeHelper.CheckPoint_828281030927956(cookie, ua, email, passEmail);
-    }
-    else
-    {
-        var tokenPage = FacebookeHelper.GetTokenEAAB(cookie, ua);
-        Console.WriteLine(tokenPage);
-        var tokenUser = await FacebookeHelper.GetAccessTokenEaab(cookie, ua);
-        Console.WriteLine(tokenUser);
+    Console.Title = "MetaTools";
+    Console.InputEncoding = Encoding.Unicode;
+    Console.OutputEncoding = Encoding.Unicode;
 
-        var token = await FacebookeHelper.GetTokenPage(tokenUser, ua, cookie);
+    string cookie;
+    string ua =
+        "Mozilla/5.0 (iPad; CPU OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/118.0 Mobile/15E148 Safari/605.1.15";
+    string tokenUser;
+    string tokenPage;
 
-        var like = await FacebookeHelper.LikePost(tokenUser);
-        if (like)
+    // cookie
+    Console.Write("Nhập cookie: ");
+    while (true)
+    {
+        var ck = Console.ReadLine();
+        if (string.IsNullOrEmpty(ck))
         {
-            Console.WriteLine("Like Done");
+            Console.Write("Nhập lại cookie: ");
         }
-        foreach (var s in token)
+        else
         {
-            like = await FacebookeHelper.LikePost(s);
-            if (like)
+            cookie = ck;
+            break;
+        }
+    }
+
+    // User agent
+    Console.WriteLine("Nhập User-Agent (có thể để trống): ");
+
+    var u = Console.ReadLine();
+    if (!string.IsNullOrEmpty(u))
+    {
+        ua = u;
+    }
+
+    // lấy token
+    Console.WriteLine("Đang lấy AccessToken User");
+
+    var tk = await FacebookeHelper.GetAccessTokenEaab(cookie, ua);
+    //var tk =
+    //    "EAABwzLixnjYBOw0sDRmx52yRhQy4lMbjsim5hYdqfJ4XqK0ZCwJ5LubcH4cKGcgE6Dj7mhkSABxvNDcThIZArHmu0rv9xZBpbWZBZBvsStwZAzcjdBHV64FxPNIzuFZBgpP8pk3oUputwagK85JzmIYG9ygPyjNUDH4K0cEO1F6QOBBcDvht8t8lO8GqOOSKI3URSvZCuztc59fH";
+
+    if (string.IsNullOrEmpty(tk))
+    {
+        Console.Write("Không lấy được AccessToken bạn vui lòng nhập tay: ");
+        while (true)
+        {
+            tk = Console.ReadLine();
+            if (string.IsNullOrEmpty(tk))
             {
-                Console.WriteLine("Like Done");
+                Console.Write("Nhập lại AccessToken: ");
+            }
+            else
+            {
+                tokenUser = tk;
+                break;
             }
         }
     }
+
+    tokenUser = tk;
+    Console.WriteLine("AccessToken: " + tokenUser);
+
+    // Kiểm tra page
+
+    var jsonPageInfo = await FacebookeHelper.GetPageInfoAsync(tokenUser);
+
+    if (string.IsNullOrEmpty(jsonPageInfo))
+    {
+        Console.WriteLine("Không lấy được thông tin page");
+    }
+    else
+    {
+        var pageInfo = JsonSerializer.Deserialize<FacebookModel>(jsonPageInfo);
+        if (pageInfo != null)
+        {
+            Console.WriteLine("Bạn có: " + pageInfo.Accounts.Data.Count + " page");
+            Console.WriteLine("Bạn vui long chọn page");
+            var pages = pageInfo.Accounts.Data;
+            for (int i = 0; i < pages.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}: {pages[i].Name}");
+            }
+
+            int chose;
+            while (true)
+            {
+                var c = Console.ReadLine();
+                if (int.TryParse(c, out int result))
+                {
+                    chose = result;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Bạn vui lòng chọn lại");
+                }
+            }
+
+            var page = pages[chose - 1];
+
+            Console.WriteLine("Bắt đầu kiểm tra tin nhắn page: " + page.Name);
+            List<Datum> messages = new List<Datum>();
+            string url = string.Empty;
+            while (true)
+            {
+                var conver = await FacebookeHelper.GetConversationsAsync(page.AccessToken, page.Id, url);
+                var conversation = JsonSerializer.Deserialize<FacebookModel>(conver);
+                if (conversation != null)
+                {
+                    if (conversation.Conversations.Data.Any())
+                    {
+                        messages.AddRange(conversation.Conversations.Data);
+                        Console.WriteLine("Đã kiểm tra số tin nhắn: " + messages.Count);
+                        url = conversation.Conversations.Paging.Next;
+                        Console.WriteLine(url);
+                    }
+
+                    if (conversation.Data.Any())
+                    {
+                        messages.AddRange(conversation.Data);
+                        Console.WriteLine("Đã kiểm tra số tin nhắn: " + messages.Count);
+                        url = conversation.Paging.Next;
+                        Console.WriteLine(url);
+                    }
+
+                    if (string.IsNullOrEmpty(url))
+                    {
+                        break;
+                    }
+                }
+            }
+
+        }
+    }
+}
+catch (Exception e)
+{
+    Console.WriteLine("Lỗi phát sinh vui lòng thử lại sau");
+    await File.AppendAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "/error.txt", $"[{DateTime.Now}] " + e.StackTrace);
 }
 
-Debug.WriteLine("Done");
+Console.WriteLine("Hẹn gặp lại");

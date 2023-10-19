@@ -2,7 +2,36 @@
 
 public class FacebookeHelper
 {
+    public static async Task<string> GetConversationsAsync(string token, string id, string url = null)
+    {
+        if (string.IsNullOrEmpty(url))
+        {
+            url = "https://graph.facebook.com/v18.0/" + id + "?fields=conversations&access_token=" + token;
+        }
 
+        var client = new HttpClient();
+        var request = new HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
+        var response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        var json = await response.Content.ReadAsStringAsync();
+
+        return json;
+    }
+
+    public static async Task<string> GetPageInfoAsync(string token)
+    {
+        var client = new HttpClient();
+
+        var request = new HttpRequestMessage(System.Net.Http.HttpMethod.Get, "https://graph.facebook.com/v18.0/me?fields=accounts&access_token=" + token);
+
+        var response = await client.SendAsync(request);
+
+        response.EnsureSuccessStatusCode();
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        return json;
+    }
     public static async Task<string[]> GetTokenPage(string token, string ua, string cookie)
     {
         var client = new HttpClient();
@@ -443,7 +472,7 @@ public class FacebookeHelper
             request.AddHeader("cookie", cookie);
             request.AddHeader("User-Agent", ua);
 
-            var respone = request.Get("https://d.facebook.com/profile.php"); 
+            var respone = request.Get("https://d.facebook.com/profile.php");
 
             string html = respone?.ToString();
 
