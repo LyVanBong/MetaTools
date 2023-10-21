@@ -3,6 +3,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Resources\Images\account.png" />
@@ -23,6 +24,9 @@
     <None Remove="Resources\Images\settings.png" />
     <None Remove="Resources\Images\settings_gray.png" />
     <None Remove="Resources\Images\user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Leaf.xNet" Version="5.2.10" />

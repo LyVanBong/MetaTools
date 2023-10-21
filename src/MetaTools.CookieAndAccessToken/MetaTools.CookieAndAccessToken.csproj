@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="23.1.41" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MetaTools.Configurations\MetaTools.Configurations.csproj" />
+    <ProjectReference Include="..\MetaTools.Helpers\MetaTools.Helpers.csproj" />
+    <ProjectReference Include="..\MetaTools.Models\MetaTools.Models.csproj" />
+    <ProjectReference Include="..\MetaTools.Repositories\MetaTools.Repositories.csproj" />
+    <ProjectReference Include="..\MetaTools.Services\MetaTools.Services.csproj" />
+  </ItemGroup>
+</Project>

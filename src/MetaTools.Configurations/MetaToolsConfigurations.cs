@@ -5,7 +5,7 @@ public class MetaToolsConfigurations
     /// <summary>
     /// Đăng ký sử dụng dịch vụ của AppCenter
     /// </summary>
-    public static void RegisterAppcenter()
+    public static Task RegisterAppcenter()
     {
         // Config AppCenter
         var countryCode = RegionInfo.CurrentRegion.TwoLetterISORegionName;
@@ -23,5 +23,12 @@ public class MetaToolsConfigurations
 
         // Tự đặt id
         //AppCenter.SetUserId("your-user-id");
+        return Task.CompletedTask;
+    }
+
+    public static Task RegisterSyncfusion()
+    {
+        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mjc3Mjk1NUAzMjMzMmUzMDJlMzBsMDZuRWk0cVlMVk5wdjhvM1dpZjMwM0JDQS9wOEZCRVhzN0Q4cHBORjVzPQ==");
+        return Task.CompletedTask;
     }
 }
