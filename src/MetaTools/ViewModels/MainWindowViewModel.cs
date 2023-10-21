@@ -13,7 +13,6 @@
                 Title = "Dashboard",
                 Icon = "../Resources/Images/dashboards_gray.png",
                 IconWhite = "../Resources/Images/dashboards.png",
-                ContentRegion = nameof(DashboardView)
             },
             new MenuModel()
             {
@@ -21,7 +20,7 @@
                 Title = "Comments",
                 Icon = "../Resources/Images/comment_gray.png",
                 IconWhite = "../Resources/Images/comment.png",
-                ContentRegion = nameof(CommentView)
+                //ContentRegion = nameof(CommentView)
             },
             new MenuModel()
             {
@@ -43,7 +42,7 @@
                 Title = "Accounts",
                 Icon = "../Resources/Images/account_gray.png",
                 IconWhite = "../Resources/Images/account.png",
-                ContentRegion = nameof(AccountsView)
+                //ContentRegion = nameof(AccountsView)
             },
             new MenuModel()
             {
@@ -88,7 +87,7 @@
         {
             await Task.Delay(1);
             Analytics.TrackEvent("MainWindowViewModel", new Dictionary<string, string>() { { "Identifier", await AppCenter.GetInstallIdAsync() + "" } });
-            RegionManager.RequestNavigate("ContentRegion", nameof(DashboardView));
+            //RegionManager.RequestNavigate("ContentRegion", nameof(DashboardView));
         }
 
         private Task NavigationAsync(MenuModel para)

@@ -5,7 +5,6 @@ namespace MetaTools.Tests
         [Fact]
         public void Test1()
         {
-
         }
     }
 }

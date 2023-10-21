@@ -1,4 +1,6 @@
-﻿namespace MetaTools.Consoles;
+﻿using MetaTools.Models;
+
+namespace MetaTools.Consoles;
 
 public class PageHelper
 {
@@ -6,7 +8,7 @@ public class PageHelper
     {
         try
         {
-            string cookie;
+            string cookie = "sb=oMKRYkzysM6HwZPpZUdY2qyX; datr=83rbYoY0JoxvW__xrpK4P3dK; locale=vi_VN; wl_cbv=v2%3Bclient_version%3A2335%3Btimestamp%3A1697397274; m_pixel_ratio=2; c_user=100027295904383; wd=2560x923; xs=35%3Ax8MizmG4Hi8y-Q%3A2%3A1697651411%3A-1%3A2769%3A%3AAcUitT92MEekxjGYRqQomd8gV_o1kycCY9xNssFfCw; usida=eyJ2ZXIiOjEsImlkIjoiQXMydXoyeGw0ZjFhMSIsInRpbWUiOjE2OTc4NTgzNjB9; fr=1I8SdRm0MO3PD71fI.AWWmgeyZ2NLMlWv6pehqPmLrZOc.BlMz5r.kv.AAA.0.0.BlM0Nt.AWXEK2dFvog";
             string ua =
                 "Mozilla/5.0 (iPad; CPU OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/118.0 Mobile/15E148 Safari/605.1.15";
             string tokenUser;
@@ -40,9 +42,8 @@ public class PageHelper
             // lấy token
             Console.WriteLine("Đang lấy AccessToken User");
 
-            //var tk = await FacebookeHelper.GetAccessTokenEaab(cookie, ua);
-            var tk =
-                "EAABwzLixnjYBOw0sDRmx52yRhQy4lMbjsim5hYdqfJ4XqK0ZCwJ5LubcH4cKGcgE6Dj7mhkSABxvNDcThIZArHmu0rv9xZBpbWZBZBvsStwZAzcjdBHV64FxPNIzuFZBgpP8pk3oUputwagK85JzmIYG9ygPyjNUDH4K0cEO1F6QOBBcDvht8t8lO8GqOOSKI3URSvZCuztc59fH";
+            var tk = await FacebookHelper.GetAccessTokenEaab(cookie, ua);
+            //var tk = "EAABwzLixnjYBOw0sDRmx52yRhQy4lMbjsim5hYdqfJ4XqK0ZCwJ5LubcH4cKGcgE6Dj7mhkSABxvNDcThIZArHmu0rv9xZBpbWZBZBvsStwZAzcjdBHV64FxPNIzuFZBgpP8pk3oUputwagK85JzmIYG9ygPyjNUDH4K0cEO1F6QOBBcDvht8t8lO8GqOOSKI3URSvZCuztc59fH";
 
             if (string.IsNullOrEmpty(tk))
             {
@@ -67,7 +68,7 @@ public class PageHelper
 
             // Kiểm tra page
 
-            var jsonPageInfo = await FacebookeHelper.GetPageInfoAsync(tokenUser);
+            var jsonPageInfo = await FacebookHelper.GetPageInfoAsync(tokenUser);
 
             if (string.IsNullOrEmpty(jsonPageInfo))
             {
@@ -108,7 +109,7 @@ public class PageHelper
                     string url = string.Empty;
                     while (true)
                     {
-                        var conver = await FacebookeHelper.GetConversationsAsync(page.AccessToken, page.Id, url);
+                        var conver = await FacebookHelper.GetConversationsAsync(page.AccessToken, page.Id, url);
                         var conversation = JsonSerializer.Deserialize<FacebookModel>(conver);
                         if (conversation != null)
                         {
@@ -137,6 +138,10 @@ public class PageHelper
 
                     if (messages.Any())
                     {
+                        var jsonString = JsonSerializer.Serialize(messages);
+
+                        await File.AppendAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "/message.txt", jsonString);
+
                         Console.WriteLine("Nhập đường dẫn file nội dung tin nhắn (*.txt):");
                         while (true)
                         {
@@ -160,7 +165,6 @@ public class PageHelper
                         else
                         {
                             var listMessage = contents.Split("\n", StringSplitOptions.RemoveEmptyEntries);
-
                         }
                     }
                     else
