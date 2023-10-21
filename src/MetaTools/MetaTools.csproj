@@ -37,6 +37,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MetaTools.Configurations\MetaTools.Configurations.csproj" />
     <ProjectReference Include="..\MetaTools.Helpers\MetaTools.Helpers.csproj" />
     <ProjectReference Include="..\MetaTools.Models\MetaTools.Models.csproj" />
     <ProjectReference Include="..\MetaTools.Repositories\MetaTools.Repositories.csproj" />
@@ -102,5 +103,8 @@
     <Reference Include="xNet">
       <HintPath>..\..\..\..\..\Downloads\xNet.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Event\" />
   </ItemGroup>
 </Project>

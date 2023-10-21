@@ -18,7 +18,7 @@ public interface IFacebookService
     /// <param name="accessToken"></param>
     /// <param name="ua"></param>
     /// <returns></returns>
-    Task<FacebookeInfoModel> GetAccountInfo(string accountId, string cookie, string accessToken, string ua);
+    Task<FacebookModel> GetAccountInfo(string accountId, string cookie, string accessToken, string ua);
 
     /// <summary>
     /// Get accesstoken eaab2 by insta

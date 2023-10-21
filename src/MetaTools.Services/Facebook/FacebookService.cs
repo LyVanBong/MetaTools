@@ -48,7 +48,7 @@ public class FacebookService : IFacebookService
         return (CheckPoint: false, CheckPointType: "LIVE");
     }
 
-    public async Task<FacebookeInfoModel> GetAccountInfo(string accountId, string cookie, string accessToken, string ua)
+    public async Task<FacebookModel> GetAccountInfo(string accountId, string cookie, string accessToken, string ua)
     {
         try
         {
@@ -70,7 +70,7 @@ public class FacebookService : IFacebookService
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<FacebookeInfoModel>(json);
+            return JsonSerializer.Deserialize<FacebookModel>(json);
         }
         catch (Exception e)
         {

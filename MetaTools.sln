@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTools.Repositories", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTools.Helpers", "src\MetaTools.Helpers\MetaTools.Helpers.csproj", "{75CEEA5A-B864-48C0-95DE-F33A8AA2468D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTools.Configurations", "src\MetaTools.Configurations\MetaTools.Configurations.csproj", "{B54E7ED6-7CF0-4704-88FB-74F014406470}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{75CEEA5A-B864-48C0-95DE-F33A8AA2468D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75CEEA5A-B864-48C0-95DE-F33A8AA2468D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75CEEA5A-B864-48C0-95DE-F33A8AA2468D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B54E7ED6-7CF0-4704-88FB-74F014406470}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B54E7ED6-7CF0-4704-88FB-74F014406470}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B54E7ED6-7CF0-4704-88FB-74F014406470}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B54E7ED6-7CF0-4704-88FB-74F014406470}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
