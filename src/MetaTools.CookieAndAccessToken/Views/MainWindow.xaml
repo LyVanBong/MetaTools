@@ -11,28 +11,33 @@
     WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="200" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <GroupBox
-            Grid.Row="0"
-            Grid.Column="0"
-            Header="Tài khoản">
-            <TextBox AcceptsReturn="True" TextWrapping="Wrap" />
+        <GroupBox Grid.Row="0" Header="Tài khoản">
+            <TextBox
+                AcceptsReturn="True"
+                Text="{Binding Account}"
+                TextWrapping="Wrap" />
         </GroupBox>
-        <GroupBox
-            Grid.Row="0"
-            Grid.Column="1"
-            Header="Cookie">
-            <TextBox AcceptsReturn="True" TextWrapping="Wrap" />
+        <GroupBox Grid.Row="2" Header="Cookie">
+            <TextBox
+                AcceptsReturn="True"
+                Text="{Binding Cookie}"
+                TextWrapping="Wrap" />
         </GroupBox>
 
-        <Grid Grid.Row="1" Grid.Column="0">
+        <GroupBox Grid.Row="4" Header="AccessToken">
+            <TextBox
+                AcceptsReturn="True"
+                Text="{Binding AccessToken}"
+                TextWrapping="Wrap" />
+        </GroupBox>
+
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="150" />
@@ -40,20 +45,24 @@
             </Grid.ColumnDefinitions>
             <Button
                 Grid.Column="0"
-                Content="Thêm tài khoản"
-                FontWeight="ExtraBold"
-                Foreground="Black" />
+                Margin="5,0"
+                Command="{Binding GetCookieCommand}"
+                CommandParameter="0"
+                Content="Lấy Cookie" />
             <Button
                 Grid.Column="1"
-                Content="Chọn tệp tin"
-                FontWeight="ExtraBold" />
+                Margin="5,0"
+                Command="{Binding GetCookieCommand}"
+                CommandParameter="1"
+                Content="Chọn tệp tin" />
             <TextBlock
                 Grid.Column="2"
+                Margin="5,0"
                 VerticalAlignment="Center"
-                Text="đường dẫn file" />
+                Text="{Binding PathAccount}" />
         </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="1">
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="150" />
@@ -61,43 +70,33 @@
             </Grid.ColumnDefinitions>
             <Button
                 Grid.Column="0"
-                Content="Thêm cookie"
-                FontWeight="ExtraBold"
-                Foreground="Black" />
+                Margin="5,0"
+                Command="{Binding GetAccessTokenCommand}"
+                CommandParameter="0"
+                Content="Lấy AccessToken" />
             <Button
                 Grid.Column="1"
-                Content="Chọn tệp tin"
-                FontWeight="ExtraBold" />
+                Margin="5,0"
+                Command="{Binding GetAccessTokenCommand}"
+                CommandParameter="1"
+                Content="Chọn tệp tin" />
             <TextBlock
                 Grid.Column="2"
+                Margin="5,0"
                 VerticalAlignment="Center"
-                Text="đường dẫn file" />
+                Text="{Binding PathCookie}" />
         </Grid>
-
-        <GroupBox
-            Grid.Row="2"
-            Grid.Column="0"
-            Header="Danh sách Cookie">
-            <DataGrid />
-        </GroupBox>
-        <GroupBox
-            Grid.Row="2"
-            Grid.Column="1"
-            Header="Danh sách AccessToken">
-            <DataGrid />
-        </GroupBox>
         <syncfusion:SfBusyIndicator
             Grid.Row="0"
-            Grid.RowSpan="3"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
+            Grid.RowSpan="5"
             AnimationType="Box"
             Background="White"
             FontSize="20"
             FontWeight="ExtraBold"
             Foreground="#4354F9"
-            Header="Đang tải..."
-            IsBusy="{Binding IsBusy}">
+            Header="{Binding LoadingText}"
+            IsBusy="{Binding IsBusy}"
+            Opacity=".5">
             <syncfusion:SfBusyIndicator.Style>
                 <Style>
                     <Style.Triggers>
