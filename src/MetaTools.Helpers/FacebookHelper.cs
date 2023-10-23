@@ -258,6 +258,68 @@ public class FacebookHelper
                                                     if (html != null)
                                                     {
                                                         // con buoc xac thuc thiet bi nua
+                                                        url = Regex.Match(html, @"/x/checkpoint/828281030927956/cp/intro/\?token=(.*?)""").Value;
+                                                        if (!string.IsNullOrEmpty(url))
+                                                        {
+                                                            url = "https://d.facebook.com" + url;
+                                                            url = HttpUtility.HtmlDecode(url);
+
+                                                            request.AddHeader("authority", "d.facebook.com");
+                                                            request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+                                                            request.AddHeader("accept-language", "en-US,en;q=0.9");
+                                                            request.AddHeader("cookie", cookie);
+                                                            request.AddHeader("dpr", "1");
+                                                            request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+                                                            request.AddHeader("sec-ch-ua-mobile", "?0");
+                                                            request.AddHeader("sec-ch-ua-model", "\"\"");
+                                                            request.AddHeader("sec-fetch-dest", "document");
+                                                            request.AddHeader("sec-fetch-mode", "navigate");
+                                                            request.AddHeader("sec-fetch-site", "none");
+                                                            request.AddHeader("sec-fetch-user", "?1");
+                                                            request.AddHeader("upgrade-insecure-requests", "1");
+                                                            request.AddHeader("user-agent", ua);
+                                                            request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+
+                                                            response = request.Get(url);
+                                                            html = response.ToString();
+                                                            if (!string.IsNullOrEmpty(html))
+                                                            {
+                                                                url = Regex.Match(html, @"/x/checkpoint/828281030927956/change_password/\?token=(.*?)""").Value;
+
+                                                                if (!string.IsNullOrEmpty(url))
+                                                                {
+                                                                    url = "https://d.facebook.com" + url;
+                                                                    url = HttpUtility.HtmlDecode(url);
+
+                                                                    request.AddHeader("authority", "d.facebook.com");
+                                                                    request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+                                                                    request.AddHeader("accept-language", "en-US,en;q=0.9");
+                                                                    request.AddHeader("cookie", cookie);
+                                                                    request.AddHeader("dpr", "1");
+                                                                    request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+                                                                    request.AddHeader("sec-ch-ua-mobile", "?0");
+                                                                    request.AddHeader("sec-ch-ua-model", "\"\"");
+                                                                    request.AddHeader("sec-fetch-dest", "document");
+                                                                    request.AddHeader("sec-fetch-mode", "navigate");
+                                                                    request.AddHeader("sec-fetch-site", "none");
+                                                                    request.AddHeader("sec-fetch-user", "?1");
+                                                                    request.AddHeader("upgrade-insecure-requests", "1");
+                                                                    request.AddHeader("user-agent", ua);
+                                                                    request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+
+                                                                    response = request.Get(url);
+
+                                                                    html = response.ToString();
+
+                                                                    if (!string.IsNullOrEmpty(html))
+                                                                    {
+
+                                                                    }
+
+                                                                    string ck = response.Cookies.GetCookieHeader(response.Address);
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
@@ -516,13 +578,65 @@ public class FacebookHelper
         return totp.ComputeTotp(DateTime.UtcNow);
     }
 
-    public static async Task<string> Login(string email, string pass, string code2fa, string ua)
+    public static bool CheckLogin(string uid, string pass, string code2fa, string ua)
+    {
+        using (HttpRequest request = new HttpRequest())
+        {
+            request.UserAgent = ua;
+
+            var respone = request.Get("https://d.facebook.com/login.php");
+
+            string html = respone?.ToString();
+
+            var match = Regex.Match(html, @"<form(.*?)</form>");
+
+            html = match.Value;
+
+            string action = HttpUtility.HtmlDecode(Regex.Match(html, @"action=""(.*?)""").Groups[1].Value);
+
+            string jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1].Value;
+
+            string lsd = Regex.Match(html, @"name=""lsd"" value=""(.*?)""").Groups[1].Value;
+
+            string m_ts = Regex.Match(html, @"name=""m_ts"" value=""(.*?)""").Groups[1].Value;
+
+            string li = Regex.Match(html, @"name=""li"" value=""(.*?)""").Groups[1].Value;
+
+            string try_number = Regex.Match(html, @"name=""try_number"" value=""(.*?)""").Groups[1].Value;
+
+            string unrecognized_tries =
+                Regex.Match(html, @"name=""unrecognized_tries"" value=""(.*?)""").Groups[1].Value;
+
+            var urlParams = new RequestParams();
+
+            urlParams["pass"] = pass;
+            urlParams["email"] = uid;
+            urlParams["jazoest"] = jazoest;
+            urlParams["lsd"] = lsd;
+            urlParams["m_ts"] = m_ts;
+            urlParams["li"] = li;
+            urlParams["try_number"] = try_number;
+            urlParams["unrecognized_tries"] = unrecognized_tries;
+
+            respone = request.Post("https://d.facebook.com" + action, urlParams);
+
+            html = respone?.ToString();
+
+            if (html.Contains("facebook_login_pw_error"))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public static async Task<string> Login(string uid, string pass, string code2fa, string ua)
     {
         try
         {
             using (HttpRequest request = new HttpRequest())
             {
-                request.UserAgent = "Mozilla/5.0 (X11; Linux i686; rv:49.0) Gecko/20100101 Firefox/49.0";
+                request.UserAgent = ua;
 
                 var respone = request.Get("https://d.facebook.com/login.php");
 
@@ -557,7 +671,7 @@ public class FacebookHelper
                 var urlParams = new RequestParams();
 
                 urlParams["pass"] = pass;
-                urlParams["email"] = email;
+                urlParams["email"] = uid;
                 urlParams["jazoest"] = jazoest;
                 urlParams["lsd"] = lsd;
                 urlParams["m_ts"] = m_ts;

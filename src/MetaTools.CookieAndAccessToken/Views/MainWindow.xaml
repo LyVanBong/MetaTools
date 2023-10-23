@@ -18,10 +18,24 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <GroupBox Grid.Row="0" Header="Tài khoản">
-            <TextBox
-                AcceptsReturn="True"
-                Text="{Binding Account}"
-                TextWrapping="Wrap" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <GroupBox Grid.Column="0" Header="Mới">
+                    <TextBox
+                        AcceptsReturn="True"
+                        Text="{Binding Account}"
+                        TextWrapping="Wrap" />
+                </GroupBox>
+                <GroupBox Grid.Column="1" Header="Lỗi">
+                    <TextBox
+                        AcceptsReturn="True"
+                        Text="{Binding ErrorAccount}"
+                        TextWrapping="Wrap" />
+                </GroupBox>
+            </Grid>
         </GroupBox>
         <GroupBox Grid.Row="2" Header="Cookie">
             <TextBox
@@ -41,6 +55,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button
@@ -52,11 +67,16 @@
             <Button
                 Grid.Column="1"
                 Margin="5,0"
+                Command="{Binding OpenCheckPointCommand}"
+                Content="Mở CheckPoint Email" />
+            <Button
+                Grid.Column="2"
+                Margin="5,0"
                 Command="{Binding GetCookieCommand}"
                 CommandParameter="1"
                 Content="Chọn tệp tin" />
             <TextBlock
-                Grid.Column="2"
+                Grid.Column="3"
                 Margin="5,0"
                 VerticalAlignment="Center"
                 Text="{Binding PathAccount}" />
@@ -96,7 +116,7 @@
             Foreground="#4354F9"
             Header="{Binding LoadingText}"
             IsBusy="{Binding IsBusy}"
-            Opacity=".5">
+            Opacity=".8">
             <syncfusion:SfBusyIndicator.Style>
                 <Style>
                     <Style.Triggers>

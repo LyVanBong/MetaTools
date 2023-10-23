@@ -1,4 +1,6 @@
-﻿namespace MetaTools.Helpers;
+﻿using Microsoft.AppCenter.Crashes;
+
+namespace MetaTools.Helpers;
 
 public class EmailHelper
 {
@@ -10,29 +12,36 @@ public class EmailHelper
 
         try
         {
-            string body;
+            await Task.Delay(5000);
             using (ImapClient client = new ImapClient())
             {
                 await client.ConnectAsync("outlook.office365.com", 993, true);
-                await client.AuthenticateAsync(email, pass);
-                var inbox = client.Inbox;
-                inbox.Open(FolderAccess.ReadOnly);
+                if (client.IsConnected)
+                {
+                    await client.AuthenticateAsync(email, pass);
+                    if (client.IsAuthenticated)
+                    {
+                        var inbox = client.Inbox;
+                        inbox.Open(FolderAccess.ReadOnly);
 
-                var message = await inbox.GetMessageAsync(inbox.Count - 1);
+                        var message = await inbox.GetMessageAsync(inbox.Count - 1);
 
-                body = message?.TextBody;
+                        var body = message?.TextBody;
+
+                        if (!string.IsNullOrEmpty(body))
+                        {
+                            return Regex.Match(body, @"\d{6,}")?.Value;
+                        }
+                    }
+                }
 
                 await client.DisconnectAsync(true);
             }
 
-            if (!string.IsNullOrEmpty(body))
-            {
-                return Regex.Match(body, @"\d{6,}")?.Value;
-            }
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Crashes.TrackError(e);
         }
 
         return string.Empty;
