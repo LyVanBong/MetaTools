@@ -126,7 +126,7 @@ namespace MetaTools.CookieAndAccessToken.ViewModels
                             }
                             else
                             {
-                                var cookie = await FacebookHelper.Login(uid, pass, code2Fa, ua);
+                                var cookie = await FacebookHelper.LoginMFacebook(uid, pass, code2Fa, ua);
                                 if (string.IsNullOrEmpty(cookie))
                                 {
                                     LoadingText = "Tài khoản " + uid + " lỗi";
@@ -199,7 +199,7 @@ namespace MetaTools.CookieAndAccessToken.ViewModels
                                       string ua = _userAgentService.Generate();
                                       LoadingText = "Bắt đầu lấy cookie UID: " + uid;
 
-                                      var cookie = await FacebookHelper.Login(uid, pass, code2Fa,
+                                      var cookie = await FacebookHelper.LoginMFacebook(uid, pass, code2Fa,
                                           ua);
                                       if (string.IsNullOrEmpty(cookie))
                                       {

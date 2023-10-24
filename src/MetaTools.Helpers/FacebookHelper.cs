@@ -5,6 +5,319 @@ namespace MetaTools.Helpers;
 
 public class FacebookHelper
 {
+
+    public static async Task<string> LoginMFacebook(string uid, string pass, string code2Fa, string ua)
+    {
+        using (HttpRequest request = new HttpRequest())
+        {
+            // Lấy các tham số cho api login
+            request.AddHeader("authority", "m.facebook.com");
+            request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            request.AddHeader("accept-language", "en-US,en;q=0.9");
+            request.AddHeader("dpr", "1");
+            request.AddHeader("referer", "https://m.facebook.com/login.php");
+            request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+            request.AddHeader("sec-ch-ua", "\"Chromium\";v=\"118\", \"Google Chrome\";v=\"118\", \"Not=A?Brand\";v=\"99\"");
+            request.AddHeader("sec-ch-ua-full-version-list", "\"Chromium\";v=\"118.0.5993.89\", \"Google Chrome\";v=\"118.0.5993.89\", \"Not=A?Brand\";v=\"99.0.0.0\"");
+            request.AddHeader("sec-ch-ua-mobile", "?0");
+            request.AddHeader("sec-ch-ua-model", "\"\"");
+            request.AddHeader("sec-ch-ua-platform", "\"Windows\"");
+            request.AddHeader("sec-ch-ua-platform-version", "\"14.0.0\"");
+            request.AddHeader("sec-fetch-dest", "document");
+            request.AddHeader("sec-fetch-mode", "navigate");
+            request.AddHeader("sec-fetch-site", "same-origin");
+            request.AddHeader("sec-fetch-user", "?1");
+            request.AddHeader("upgrade-insecure-requests", "1");
+            request.AddHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36");
+            request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+
+            HttpResponse response = request.Get("https://m.facebook.com/login.php");
+
+            string html = response.ToString();
+
+            // Login
+            request.AddHeader("authority", "m.facebook.com");
+            request.AddHeader("accept", "*/*");
+            request.AddHeader("accept-language", "en-US,en;q=0.9");
+            request.AddHeader("content-type", "application/x-www-form-urlencoded");
+            request.AddHeader("dpr", "1");
+            request.AddHeader("origin", "https://m.facebook.com");
+            request.AddHeader("referer", "https://m.facebook.com/login.php");
+            request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+            request.AddHeader("sec-ch-ua-mobile", "?0");
+            request.AddHeader("sec-ch-ua-model", "\"\"");
+            request.AddHeader("sec-fetch-dest", "empty");
+            request.AddHeader("sec-fetch-mode", "cors");
+            request.AddHeader("sec-fetch-site", "same-origin");
+            request.AddHeader("user-agent", ua);
+            request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+            request.AddHeader("x-asbd-id", "129477");
+            request.AddHeader("x-fb-lsd", "AVrpYuzqzTo");
+            request.AddHeader("x-requested-with", "XMLHttpRequest");
+            request.AddHeader("x-response-format", "JSONStream");
+
+            var para = new RequestParams(true, true);
+
+            string mts = Regex.Match(html, @"name=""m_ts"" value=""(.*?)""").Groups[1].Value;
+            string li = Regex.Match(html, @"name=""li"" value=""(.*?)""").Groups[1].Value;
+            string jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1].Value;
+            string lsd = Regex.Match(html, @"name=""lsd"" value=""(.*?)""").Groups[1].Value;
+
+            para.Add(new("m_ts", mts));
+            para.Add(new("li", li));
+            para.Add(new("try_number", "0"));
+            para.Add(new("unrecognized_tries", "0"));
+            para.Add(new("email", uid));
+            para.Add(new("prefill_contact_point", uid));
+            para.Add(new("prefill_source", "browser_dropdown"));
+            para.Add(new("prefill_type", "password"));
+            para.Add(new("first_prefill_source", "browser_dropdown"));
+            para.Add(new("first_prefill_type", "contact_point"));
+            para.Add(new("had_cp_prefilled", "true"));
+            para.Add(new("had_password_prefilled", "true"));
+            para.Add(new("is_smart_lock", "false"));
+            para.Add(new("bi_xrwh", "0"));
+            para.Add(new("bi_wvdp", "{\"hwc\":true,\"hwcr\":false,\"has_dnt\":true,\"has_standalone\":false,\"wnd_toStr_toStr\":\"function toString() { [native code] }\",\"hasPerm\":true,\"permission_query_toString\":\"function query() { [native code] }\",\"permission_query_toString_toString\":\"function toString() { [native code] }\",\"has_seWo\":true,\"has_meDe\":true,\"has_creds\":true,\"has_hwi_bt\":false,\"has_agjsi\":false,\"iframeProto\":\"function get contentWindow() { [native code] }\",\"remap\":false,\"iframeData\":{\"hwc\":true,\"hwcr\":false,\"has_dnt\":true,\"has_standalone\":false,\"wnd_toStr_toStr\":\"function toString() { [native code] }\",\"hasPerm\":true,\"permission_query_toString\":\"function query() { [native code] }\",\"permission_query_toString_toString\":\"function toString() { [native code] }\",\"has_seWo\":true,\"has_meDe\":true,\"has_creds\":true,\"has_hwi_bt\":false,\"has_agjsi\":false}}"));
+            para.Add(new("encpass", pass));
+            para.Add(new("jazoest", jazoest));
+            para.Add(new("lsd", lsd));
+            para.Add(new("__dyn", "1KQdAG1mwHwh8-t0BBBgS5UdE4a2i5U4e0C86u7E39x60lW4o3Bw4Ewk9E4W0om78b87C1Jw20Ehw73wwyo36wdq0ny1Aw4vw8W0iW220jG3qaw4kwbS1Lw9C0z82fwSw"));
+            para.Add(new("__csr", ""));
+            para.Add(new("__req", "5"));
+            para.Add(new("__a", "AYn0jkZsZ_ysNPb2S-khcNhzW6hzE0jBcIP94OSdHBF8uUN5JXXus7gILpSCAsF1Ui5rD7P5E8snZo40AU6uZ-lnYNNFTFUWTrgVytt0njMSMQ"));
+            para.Add(new("__user", "0"));
+
+            response = request.Post("https://m.facebook.com/login/device-based/login/async/?refsrc=deprecated&lwv=100", para);
+
+            html = response.ToString();
+
+            request.AddHeader("authority", "m.facebook.com");
+            request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            request.AddHeader("accept-language", "en-US,en;q=0.9");
+            request.AddHeader("dpr", "1");
+            request.AddHeader("referer", "https://m.facebook.com/login.php");
+            request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+            request.AddHeader("sec-ch-ua-mobile", "?0");
+            request.AddHeader("sec-ch-ua-model", "\"\"");
+            request.AddHeader("sec-fetch-dest", "document");
+            request.AddHeader("sec-fetch-mode", "navigate");
+            request.AddHeader("sec-fetch-site", "same-origin");
+            request.AddHeader("sec-fetch-user", "?1");
+            request.AddHeader("upgrade-insecure-requests", "1");
+            request.AddHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36");
+            request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+
+            response = request.Get("https://m.facebook.com/checkpoint/?__req=5");
+
+            html = response.ToString();
+
+            // tai khoan xac thuc 2 fa
+            request.AddHeader("authority", "m.facebook.com");
+            request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            request.AddHeader("accept-language", "en-US,en;q=0.9");
+            request.AddHeader("cache-control", "max-age=0");
+            request.AddHeader("content-type", "application/x-www-form-urlencoded");
+            request.AddHeader("dpr", "1");
+            request.AddHeader("origin", "https://m.facebook.com");
+            request.AddHeader("referer", "https://m.facebook.com/checkpoint/?__req=6");
+            request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+            request.AddHeader("sec-ch-ua-mobile", "?0");
+            request.AddHeader("sec-ch-ua-model", "\"\"");
+            request.AddHeader("sec-fetch-dest", "document");
+            request.AddHeader("sec-fetch-mode", "navigate");
+            request.AddHeader("sec-fetch-site", "same-origin");
+            request.AddHeader("sec-fetch-user", "?1");
+            request.AddHeader("upgrade-insecure-requests", "1");
+            request.AddHeader("user-agent", ua);
+            request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+
+            string fbDtsg = Regex.Match(html, @"name=""fb_dtsg"" value=""(.*?)""").Groups[1].Value;
+            jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1].Value;
+            string nh = Regex.Match(html, @"name=""nh"" value=""(.*?)""").Groups[1].Value;
+
+            para = new RequestParams(true, true);
+            para.Add(new("fb_dtsg", fbDtsg));
+            para.Add(new("jazoest", jazoest));
+            para.Add(new("checkpoint_data", ""));
+            para.Add(new("approvals_code", Get2Fa(code2Fa)));
+            para.Add(new("codes_submitted", "0"));
+            para.Add(new("submit[Submit Code]", "Submit"));
+            para.Add(new("nh", nh));
+
+            response = request.Post("https://m.facebook.com/login/checkpoint/", para);
+
+            html = response.ToString();
+
+            // luu thiet bi
+            request.AddHeader("authority", "m.facebook.com");
+            request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            request.AddHeader("accept-language", "en-US,en;q=0.9");
+            request.AddHeader("cache-control", "max-age=0");
+            request.AddHeader("content-type", "application/x-www-form-urlencoded");
+            request.AddHeader("dpr", "1");
+            request.AddHeader("origin", "https://m.facebook.com");
+            request.AddHeader("referer", "https://m.facebook.com/checkpoint/?__req=6");
+            request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+            request.AddHeader("sec-ch-ua-mobile", "?0");
+            request.AddHeader("sec-ch-ua-model", "\"\"");
+            request.AddHeader("sec-fetch-dest", "document");
+            request.AddHeader("sec-fetch-mode", "navigate");
+            request.AddHeader("sec-fetch-site", "same-origin");
+            request.AddHeader("sec-fetch-user", "?1");
+            request.AddHeader("upgrade-insecure-requests", "1");
+            request.AddHeader("user-agent", ua);
+            request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+
+            fbDtsg = Regex.Match(html, @"name=""fb_dtsg"" value=""(.*?)""").Groups[1].Value;
+            jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1].Value;
+            nh = Regex.Match(html, @"name=""nh"" value=""(.*?)""").Groups[1].Value;
+
+            para = new RequestParams(true, true);
+            para.Add(new("fb_dtsg", fbDtsg));
+            para.Add(new("jazoest", jazoest));
+            para.Add(new("checkpoint_data", ""));
+            para.Add(new("name_action_selected", "save_device"));
+            para.Add(new("submit[Continue]: ", "Continue"));
+            para.Add(new("nh", nh));
+
+            response = request.Post("https://m.facebook.com/login/checkpoint/", para);
+
+            html = response.ToString();
+
+            // luu thiet bi 2
+            request.AddHeader("authority", "m.facebook.com");
+            request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            request.AddHeader("accept-language", "en-US,en;q=0.9");
+            request.AddHeader("cache-control", "max-age=0");
+            request.AddHeader("content-type", "application/x-www-form-urlencoded");
+            request.AddHeader("dpr", "1");
+            request.AddHeader("origin", "https://m.facebook.com");
+            request.AddHeader("referer", "https://m.facebook.com/checkpoint/?__req=6");
+            request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+            request.AddHeader("sec-ch-ua-mobile", "?0");
+            request.AddHeader("sec-ch-ua-model", "\"\"");
+            request.AddHeader("sec-fetch-dest", "document");
+            request.AddHeader("sec-fetch-mode", "navigate");
+            request.AddHeader("sec-fetch-site", "same-origin");
+            request.AddHeader("sec-fetch-user", "?1");
+            request.AddHeader("upgrade-insecure-requests", "1");
+            request.AddHeader("user-agent", ua);
+            request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+
+            fbDtsg = Regex.Match(html, @"name=""fb_dtsg"" value=""(.*?)""").Groups[1].Value;
+            jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1].Value;
+            nh = Regex.Match(html, @"name=""nh"" value=""(.*?)""").Groups[1].Value;
+
+            para = new RequestParams(true, true);
+            para.Add(new("fb_dtsg", fbDtsg));
+            para.Add(new("jazoest", jazoest));
+            para.Add(new("checkpoint_data", ""));
+            para.Add(new("submit[Continue]: ", "Continue"));
+            para.Add(new("nh", nh));
+
+            response = request.Post("https://m.facebook.com/login/checkpoint/", para);
+            
+            html = response.ToString();
+
+            // day la toi
+            request.AddHeader("authority", "m.facebook.com");
+            request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            request.AddHeader("accept-language", "en-US,en;q=0.9");
+            request.AddHeader("cache-control", "max-age=0");
+            request.AddHeader("content-type", "application/x-www-form-urlencoded");
+            request.AddHeader("dpr", "1");
+            request.AddHeader("origin", "https://m.facebook.com");
+            request.AddHeader("referer", "https://m.facebook.com/checkpoint/?__req=6");
+            request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+            request.AddHeader("sec-ch-ua-mobile", "?0");
+            request.AddHeader("sec-ch-ua-model", "\"\"");
+            request.AddHeader("sec-fetch-dest", "document");
+            request.AddHeader("sec-fetch-mode", "navigate");
+            request.AddHeader("sec-fetch-site", "same-origin");
+            request.AddHeader("sec-fetch-user", "?1");
+            request.AddHeader("upgrade-insecure-requests", "1");
+            request.AddHeader("user-agent", ua);
+            request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+
+            fbDtsg = Regex.Match(html, @"name=""fb_dtsg"" value=""(.*?)""").Groups[1].Value;
+            jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1].Value;
+            nh = Regex.Match(html, @"name=""nh"" value=""(.*?)""").Groups[1].Value;
+
+            para = new RequestParams(true, true);
+            para.Add(new("fb_dtsg", fbDtsg));
+            para.Add(new("jazoest", jazoest));
+            para.Add(new("checkpoint_data", ""));
+            para.Add(new("submit[This was me]", "This was me"));
+            para.Add(new("nh", nh));
+
+            response = request.Post("https://m.facebook.com/login/checkpoint/", para);
+
+            html = response.ToString();
+
+            // LUU THIET BI
+            request.AddHeader("authority", "m.facebook.com");
+            request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            request.AddHeader("accept-language", "en-US,en;q=0.9");
+            request.AddHeader("cache-control", "max-age=0");
+            request.AddHeader("content-type", "application/x-www-form-urlencoded");
+            request.AddHeader("dpr", "1");
+            request.AddHeader("origin", "https://m.facebook.com");
+            request.AddHeader("referer", "https://m.facebook.com/checkpoint/");
+            request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+            request.AddHeader("sec-ch-ua-mobile", "?0");
+            request.AddHeader("sec-ch-ua-model", "\"\"");
+            request.AddHeader("sec-fetch-dest", "document");
+            request.AddHeader("sec-fetch-mode", "navigate");
+            request.AddHeader("sec-fetch-site", "same-origin");
+            request.AddHeader("sec-fetch-user", "?1");
+            request.AddHeader("upgrade-insecure-requests", "1");
+            request.AddHeader("user-agent", ua);
+            request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+
+            fbDtsg = Regex.Match(html, @"name=""fb_dtsg"" value=""(.*?)""").Groups[1].Value;
+            jazoest = Regex.Match(html, @"name=""jazoest"" value=""(.*?)""").Groups[1].Value;
+            nh = Regex.Match(html, @"name=""nh"" value=""(.*?)""").Groups[1].Value;
+
+            para = new RequestParams(true, true);
+            para.Add(new("fb_dtsg", fbDtsg));
+            para.Add(new("jazoest", jazoest));
+            para.Add(new("checkpoint_data", ""));
+            para.Add(new("submit[Continue]", "Continue"));
+            para.Add(new("name_action_selected", "save_device"));
+            para.Add(new("nh", nh));
+
+            response = request.Post("https://m.facebook.com/login/checkpoint/", para);
+
+            html = response.ToString();
+
+            request.AddHeader("authority", "m.facebook.com");
+            request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            request.AddHeader("accept-language", "en-US,en;q=0.9");
+            request.AddHeader("cache-control", "max-age=0");
+            request.AddHeader("dpr", "1");
+            request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+            request.AddHeader("sec-ch-ua-mobile", "?0");
+            request.AddHeader("sec-ch-ua-model", "\"\"");
+            request.AddHeader("sec-fetch-dest", "document");
+            request.AddHeader("sec-fetch-mode", "navigate");
+            request.AddHeader("sec-fetch-site", "same-origin");
+            request.AddHeader("sec-fetch-user", "?1");
+            request.AddHeader("upgrade-insecure-requests", "1");
+            request.AddHeader("user-agent", ua);
+            request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
+
+            response = request.Get("https://m.facebook.com/");
+
+            html = response.ToString();
+
+            var cookie = response.Cookies.GetCookieHeader(response.Address);
+            if (cookie.Contains("c_user="))
+            {
+                return cookie;
+            }
+        }
+        return string.Empty;
+    }
     public static async Task<string> GetConversationsAsync(string token, string id, string url = null)
     {
         if (string.IsNullOrEmpty(url))
