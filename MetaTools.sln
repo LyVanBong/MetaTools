@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.Helpers", "src\Me
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.Configurations", "src\MetaTools.Configurations\MetaTools.Configurations.csproj", "{B54E7ED6-7CF0-4704-88FB-74F014406470}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.CookieToken", "src\MetaTools.CookieAndAccessToken\MetaTools.CookieToken.csproj", "{E27A7ACE-2763-4D54-AAD8-28B2CFBAF2F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.CookieToken", "src\MetaTools.CookieToken\MetaTools.CookieToken.csproj", "{E27A7ACE-2763-4D54-AAD8-28B2CFBAF2F2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTools.Post", "src\MetaTools.Post\MetaTools.Post.csproj", "{34E48312-D8E6-4A6D-B896-9B533669F113}"
 EndProject
