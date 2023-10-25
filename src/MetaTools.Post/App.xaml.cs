@@ -29,6 +29,9 @@
             containerRegistry.RegisterSingleton<IFacebookService, FacebookService>();
             containerRegistry.RegisterSingleton<IUserAgentService, UserAgentService>();
             containerRegistry.RegisterSingleton<IRequestProvider, RequestProvider>();
+
+            containerRegistry.RegisterSingleton<IAccountRepository, AccountRepository>();
+            containerRegistry.RegisterSingleton<ITokenRepository, TokenRepository>();
         }
     }
 }

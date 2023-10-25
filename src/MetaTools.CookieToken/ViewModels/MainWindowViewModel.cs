@@ -1,4 +1,7 @@
-﻿namespace MetaTools.CookieToken.ViewModels
+﻿using System.Linq;
+using MetaTools.Models;
+
+namespace MetaTools.CookieToken.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
@@ -7,12 +10,15 @@
         private string _loadingText = "Đang tải...";
         private string _pathCookie;
         private string _pathAccount;
-        private string _accessToken;
-        private string _cookie;
+        private string _accessToken = string.Empty;
+        private string _cookie = string.Empty;
         private string _account;
         private readonly IUserAgentService _userAgentService;
-        private string _errorAccount;
-
+        private string _errorAccount = string.Empty;
+        private readonly ITokenRepository _tokenRepository;
+        private readonly IAccountRepository _accountRepository;
+        private List<TokenModel> _tokenModels = new List<TokenModel>();
+        private List<AccountErrorModel> _accountModels = new List<AccountErrorModel>();
         public string ErrorAccount
         {
             get => _errorAccount;
@@ -73,12 +79,48 @@
 
         public ICommand OpenCheckPointCommand { get; private set; }
 
-        public MainWindowViewModel(IUserAgentService userAgentService)
+        public MainWindowViewModel(IUserAgentService userAgentService, ITokenRepository tokenRepository, IAccountRepository accountRepository)
         {
             _userAgentService = userAgentService;
+            _tokenRepository = tokenRepository;
+            _accountRepository = accountRepository;
             GetAccessTokenCommand = new DelegateCommand<string>(s => _ = GetAccessToken(s));
             GetCookieCommand = new DelegateCommand<string>(s => _ = GetCookie(s));
             OpenCheckPointCommand = new DelegateCommand(() => _ = OpenCheckPoint());
+            _ = InitData();
+        }
+
+        private async Task InitData()
+        {
+            await Task.Delay(1000);
+
+            _tokenModels = await _tokenRepository.GetAllAsync();
+
+            if (_tokenModels != null && _tokenModels.Any())
+            {
+                foreach (var token in _tokenModels)
+                {
+                    AccessToken += token.Token + "\n";
+                }
+            }
+
+            _accountModels = await _accountRepository.GetAllAsync();
+            if (_accountModels != null && _accountModels.Any())
+            {
+                foreach (var account in _accountModels)
+                {
+                    if (account.IsError)
+                    {
+                        ErrorAccount += account.ToString() + "\n";
+                    }
+                    else
+                    {
+                        Account += account.ToString() + "\n";
+                        Cookie += account.Cookie + "\n";
+                    }
+                }
+            }
+
         }
 
         private async Task OpenCheckPoint()
@@ -177,38 +219,51 @@
                                   var acc = s.Split('|', StringSplitOptions.RemoveEmptyEntries);
                                   if (acc != null)
                                   {
-                                      string uid = acc[0];
-                                      string pass = acc[1];
-                                      string code2Fa = acc[2];
-                                      string email = acc[3];
-                                      string passEmail = acc[4];
-                                      string ua = _userAgentService.Generate();
-                                      LoadingText = "Bắt đầu lấy cookie UID: " + uid;
+                                      var a = _accountModels.FirstOrDefault(x => x.Uid == acc[0]);
 
-                                      var cookie = await FacebookHelper.LoginMFacebook(uid, pass, code2Fa,
-                                          ua);
+                                      var account = new AccountErrorModel()
+                                      {
+                                          Uid = acc[0],
+                                          Pass = acc[1],
+                                          Code2Fa = acc[2],
+                                          Email = acc[3],
+                                          PassEmail = acc[4],
+                                          UserAgent = a == null ? _userAgentService.Generate() : a.UserAgent,
+                                      };
+
+                                      LoadingText = "Bắt đầu lấy cookie UID: " + account.Uid;
+
+                                      Cookie = Cookie.Replace(s, s + "|" + account.UserAgent);
+
+                                      var cookie = await FacebookHelper.LoginMFacebook(account.Uid, account.Pass, account.Code2Fa,
+                                          account.UserAgent);
                                       if (string.IsNullOrEmpty(cookie))
                                       {
                                           ErrorAccount += s + "\n";
+                                          account.IsError = true;
                                           Account = Account.Replace(s, "").Replace("\n", "");
-                                          LoadingText = "Bắt đầu lấy cookie UID: " + uid + "\nKhông lấy được cookie";
+                                          LoadingText = "Bắt đầu lấy cookie UID: " + account.Uid + "\nKhông lấy được cookie";
                                       }
                                       else
                                       {
                                           // kiểm tra checkpoint
 
-                                          if (FacebookHelper.CheckPoint(cookie, ua))
+                                          if (FacebookHelper.CheckPoint(cookie, account.UserAgent))
                                           {
                                               ErrorAccount += s + "\n";
+                                              account.IsError = true;
                                               Account = Account.Replace(s, "").Replace("\n", "");
-                                              LoadingText = "Bắt đầu lấy cookie UID: " + uid + "\nTài khoản bị checkpoint";
+                                              LoadingText = "Bắt đầu lấy cookie UID: " + account.Uid + "\nTài khoản bị checkpoint";
                                           }
                                           else
                                           {
                                               Cookie = cookie + "\n" + Cookie;
-                                              LoadingText = "Bắt đầu lấy cookie UID: " + uid + "\nDone";
+                                              LoadingText = "Bắt đầu lấy cookie UID: " + account.Uid + "\nDone";
+                                              account.Cookie = cookie;
                                           }
                                       }
+
+                                      await _accountRepository.AddAsync(account);
                                   }
                               });
                         }
@@ -261,6 +316,8 @@
                         {
                             await Parallel.ForEachAsync(data, async (s, cancel) =>
                             {
+                                var u = s.Split("c_user=")[1].Split(";")[0];
+
                                 LoadingText = "Get token cookie: " + s;
                                 var ua = _userAgentService.Generate();
                                 var token = await FacebookHelper.GetAccessTokenEaab(s, ua);
@@ -271,12 +328,24 @@
                                 else
                                 {
                                     AccessToken += token + "\n";
+                                    await _tokenRepository.AddAsync(new TokenModel()
+                                    {
+                                        Uid = u,
+                                        Token = token
+                                    });
                                     var tokenPage = await FacebookHelper.GetTokenPage(token, ua, s);
                                     if (tokenPage != null)
                                     {
+                                        int i = 2;
                                         foreach (var tk in tokenPage)
                                         {
                                             AccessToken += tk + "\n";
+                                            await _tokenRepository.AddAsync(new TokenModel()
+                                            {
+                                                Uid = u + "_" + i,
+                                                Token = token
+                                            });
+                                            i++;
                                         }
                                     }
                                     else

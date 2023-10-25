@@ -1,10 +1,75 @@
-﻿<Window x:Class="MetaTools.Post.Views.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:prism="http://prismlibrary.com/"
-        prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="{Binding Title}" Height="350" Width="525" >
+﻿<Window
+    x:Class="MetaTools.Post.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:prism="http://prismlibrary.com/"
+    Title="{Binding Title}"
+    MinWidth="1459"
+    MinHeight="810"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    WindowStartupLocation="CenterScreen">
     <Grid>
-       
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <GroupBox
+            Grid.Row="0"
+            Grid.Column="0"
+            Header="AccessToken">
+            <TextBox
+                AcceptsReturn="True"
+                Text="{Binding AccessToken}"
+                TextWrapping="Wrap" />
+        </GroupBox>
+        <GroupBox
+            Grid.Row="0"
+            Grid.Column="1"
+            Header="Uid-IdPost">
+            <TextBox
+                AcceptsReturn="True"
+                Text="{Binding UidIdPost}"
+                TextWrapping="Wrap" />
+        </GroupBox>
+        <Grid
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="0"
+                Margin="5,0"
+                Command="{Binding LikePostCommand}"
+                Content="Thích bài viết" />
+            <Button
+                Grid.Column="1"
+                Margin="5,0"
+                Command="{Binding ChooseFileCommand}"
+                Content="Chọn tệp tin" />
+            <TextBlock
+                Grid.Column="2"
+                Margin="5,0"
+                VerticalAlignment="Center"
+                Text="{Binding PathFile}" />
+        </Grid>
+        <GroupBox
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Header="History">
+            <TextBox
+                AcceptsReturn="True"
+                Text="{Binding History}"
+                TextWrapping="Wrap" />
+        </GroupBox>
     </Grid>
 </Window>

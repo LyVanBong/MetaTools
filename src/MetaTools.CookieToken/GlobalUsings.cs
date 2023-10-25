@@ -19,3 +19,5 @@ global using System.Threading.Tasks;
 global using System.Windows;
 global using System.Windows.Input;
 global using MetaTools.CookieToken.Views;
+global using MetaTools.Repositories.Account;
+global using MetaTools.Repositories.Token;
