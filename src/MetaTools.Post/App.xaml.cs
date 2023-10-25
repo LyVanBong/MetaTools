@@ -1,4 +1,4 @@
-﻿namespace MetaTools.CookieToken
+﻿namespace MetaTools.Post
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.Configurations", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.CookieToken", "src\MetaTools.CookieAndAccessToken\MetaTools.CookieToken.csproj", "{E27A7ACE-2763-4D54-AAD8-28B2CFBAF2F2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTools.Post", "src\MetaTools.Post\MetaTools.Post.csproj", "{34E48312-D8E6-4A6D-B896-9B533669F113}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{E27A7ACE-2763-4D54-AAD8-28B2CFBAF2F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E27A7ACE-2763-4D54-AAD8-28B2CFBAF2F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E27A7ACE-2763-4D54-AAD8-28B2CFBAF2F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34E48312-D8E6-4A6D-B896-9B533669F113}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34E48312-D8E6-4A6D-B896-9B533669F113}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34E48312-D8E6-4A6D-B896-9B533669F113}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34E48312-D8E6-4A6D-B896-9B533669F113}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

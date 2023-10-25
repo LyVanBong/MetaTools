@@ -9,7 +9,7 @@
         {
             base.OnStartup(e);
 
-            MetaToolsConfigurations.RegisterAppcenter();
+            _ = MetaToolsConfigurations.RegisterAppCenter();
 
             // Khởi tạo background service
             var task = Container.Resolve<IBackgroundTaskService>();

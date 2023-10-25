@@ -5,15 +5,15 @@ public class MetaToolsConfigurations
     /// <summary>
     /// Đăng ký sử dụng dịch vụ của AppCenter
     /// </summary>
-    public static Task RegisterAppcenter()
+    public static async Task RegisterAppCenter()
     {
         // Config AppCenter
         var countryCode = RegionInfo.CurrentRegion.TwoLetterISORegionName;
 
         AppCenter.SetCountryCode(countryCode);
-        AppCenter.SetEnabledAsync(true);
-        Crashes.SetEnabledAsync(true);
-        Analytics.SetEnabledAsync(true);
+        await AppCenter.SetEnabledAsync(true);
+        await Crashes.SetEnabledAsync(true);
+        await Analytics.SetEnabledAsync(true);
 
         AppCenter.Start("1eaba9dd-3cb4-40c0-8757-124b3b247488",
             typeof(Analytics), typeof(Crashes));
@@ -27,9 +27,9 @@ public class MetaToolsConfigurations
         Analytics.TrackEvent("AppDomain", new Dictionary<string, string>()
         {
             {"Name",app.FriendlyName},
-            {"BaseDirectory",app.BaseDirectory}
+            {"BaseDirectory",app.BaseDirectory},
+            {"Identifier",await AppCenter.GetInstallIdAsync()+""}
         });
-        return Task.CompletedTask;
     }
 
     public static Task RegisterSyncfusion()
