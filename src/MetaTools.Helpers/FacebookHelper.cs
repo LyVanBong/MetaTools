@@ -5,7 +5,6 @@ namespace MetaTools.Helpers;
 
 public class FacebookHelper
 {
-
     public static async Task<string> LoginMFacebook(string uid, string pass, string code2Fa, string ua)
     {
         using (HttpRequest request = new HttpRequest())
@@ -216,7 +215,7 @@ public class FacebookHelper
             para.Add(new("nh", nh));
 
             response = request.Post("https://m.facebook.com/login/checkpoint/", para);
-            
+
             html = response.ToString();
 
             // day la toi
@@ -318,6 +317,7 @@ public class FacebookHelper
         }
         return string.Empty;
     }
+
     public static async Task<string> GetConversationsAsync(string token, string id, string url = null)
     {
         if (string.IsNullOrEmpty(url))
@@ -374,7 +374,6 @@ public class FacebookHelper
                 var json = await response.Content.ReadAsStringAsync();
                 return Regex.Matches(json, @"""access_token"": ""(.*?)""").Select(x => x?.Groups[1]?.Value)?.ToArray();
             }
-
         }
         catch (Exception e)
         {
@@ -626,7 +625,6 @@ public class FacebookHelper
 
                                                                     if (!string.IsNullOrEmpty(html))
                                                                     {
-
                                                                     }
 
                                                                     string ck = response.Cookies.GetCookieHeader(response.Address);
@@ -790,7 +788,6 @@ public class FacebookHelper
                     }
                 }
             }
-
         }
         catch (Exception e)
         {
@@ -943,6 +940,7 @@ public class FacebookHelper
 
         return false;
     }
+
     public static async Task<string> Login(string uid, string pass, string code2fa, string ua)
     {
         try
@@ -1190,7 +1188,6 @@ public class FacebookHelper
                     return cookie;
                 }
             }
-
         }
         catch (Exception e)
         {

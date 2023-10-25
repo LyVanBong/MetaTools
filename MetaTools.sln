@@ -9,17 +9,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.Consoles", "src\M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.Tests", "src\MetaTools.Tests\MetaTools.Tests.csproj", "{C5630640-A6C0-48EA-AF53-B9615166A644}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTools.Models", "src\MetaTools.Models\MetaTools.Models.csproj", "{CFC126DF-F2DA-459E-961A-C22BA78500FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.Models", "src\MetaTools.Models\MetaTools.Models.csproj", "{CFC126DF-F2DA-459E-961A-C22BA78500FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTools.Services", "src\MetaTools.Services\MetaTools.Services.csproj", "{179050FB-0662-4BB0-901C-9A5DC1FD22BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.Services", "src\MetaTools.Services\MetaTools.Services.csproj", "{179050FB-0662-4BB0-901C-9A5DC1FD22BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTools.Repositories", "src\MetaTools.Repositories\MetaTools.Repositories.csproj", "{5D5C0B57-F35B-40C2-998C-B45B2674FC51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.Repositories", "src\MetaTools.Repositories\MetaTools.Repositories.csproj", "{5D5C0B57-F35B-40C2-998C-B45B2674FC51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTools.Helpers", "src\MetaTools.Helpers\MetaTools.Helpers.csproj", "{75CEEA5A-B864-48C0-95DE-F33A8AA2468D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.Helpers", "src\MetaTools.Helpers\MetaTools.Helpers.csproj", "{75CEEA5A-B864-48C0-95DE-F33A8AA2468D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTools.Configurations", "src\MetaTools.Configurations\MetaTools.Configurations.csproj", "{B54E7ED6-7CF0-4704-88FB-74F014406470}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.Configurations", "src\MetaTools.Configurations\MetaTools.Configurations.csproj", "{B54E7ED6-7CF0-4704-88FB-74F014406470}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTools.CookieAndAccessToken", "src\MetaTools.CookieAndAccessToken\MetaTools.CookieAndAccessToken.csproj", "{E27A7ACE-2763-4D54-AAD8-28B2CFBAF2F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaTools.CookieToken", "src\MetaTools.CookieAndAccessToken\MetaTools.CookieToken.csproj", "{E27A7ACE-2763-4D54-AAD8-28B2CFBAF2F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

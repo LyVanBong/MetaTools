@@ -23,6 +23,12 @@ public class MetaToolsConfigurations
 
         // Tự đặt id
         //AppCenter.SetUserId("your-user-id");
+        var app = AppDomain.CurrentDomain;
+        Analytics.TrackEvent("AppDomain", new Dictionary<string, string>()
+        {
+            {"Name",app.FriendlyName},
+            {"BaseDirectory",app.BaseDirectory}
+        });
         return Task.CompletedTask;
     }
 

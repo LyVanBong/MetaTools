@@ -1,18 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using System.Windows;
-using Prism.Commands;
-using Prism.Mvvm;
-using System.Windows.Input;
-using MetaTools.Helpers;
-using MetaTools.Services.UserAgent;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-using Microsoft.Win32;
-
-namespace MetaTools.CookieAndAccessToken.ViewModels
+﻿namespace MetaTools.CookieToken.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
@@ -86,6 +72,7 @@ namespace MetaTools.CookieAndAccessToken.ViewModels
         }
 
         public ICommand OpenCheckPointCommand { get; private set; }
+
         public MainWindowViewModel(IUserAgentService userAgentService)
         {
             _userAgentService = userAgentService;
@@ -148,15 +135,14 @@ namespace MetaTools.CookieAndAccessToken.ViewModels
                                     }
                                 }
                             }
-
                         }
-
                     });
                 }
             }
 
             IsBusy = false;
         }
+
         private async Task GetCookie(string obj)
         {
             try

@@ -37,7 +37,6 @@ public class EmailHelper
 
                 await client.DisconnectAsync(true);
             }
-
         }
         catch (Exception e)
         {

@@ -1,13 +1,4 @@
-﻿using MetaTools.CookieAndAccessToken.Views;
-using Prism.Ioc;
-using System.Windows;
-using MetaTools.Configurations;
-using MetaTools.CookieAndAccessToken.ViewModels;
-using MetaTools.Services.Facebook;
-using MetaTools.Services.RequestProvider;
-using MetaTools.Services.UserAgent;
-
-namespace MetaTools.CookieAndAccessToken
+﻿namespace MetaTools.CookieToken
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -18,9 +9,11 @@ namespace MetaTools.CookieAndAccessToken
         {
             MetaToolsConfigurations.RegisterSyncfusion();
         }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
             MetaToolsConfigurations.RegisterAppcenter();
         }
 
@@ -32,7 +25,6 @@ namespace MetaTools.CookieAndAccessToken
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
-
 
             containerRegistry.RegisterSingleton<IFacebookService, FacebookService>();
             containerRegistry.RegisterSingleton<IUserAgentService, UserAgentService>();

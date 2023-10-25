@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace MetaTools.CookieAndAccessToken.Views
+﻿namespace MetaTools.CookieToken.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
