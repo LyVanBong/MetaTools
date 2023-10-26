@@ -6,6 +6,9 @@ public class AccountErrorModel : AccountModel
     public bool IsError { get; set; }
     public override string ToString()
     {
-        return (base.ToString() + "|" + IsError + "|" + ErrorMessage).Replace("||", "|");
+        if (IsError)
+            return (base.ToString() + "|" + IsError + "|" + ErrorMessage).Replace("||", "|");
+        else
+            return base.ToString();
     }
 }

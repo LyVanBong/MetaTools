@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using MetaTools.Models;
-
-namespace MetaTools.CookieToken.ViewModels
+﻿namespace MetaTools.CookieToken.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
@@ -235,15 +232,18 @@ namespace MetaTools.CookieToken.ViewModels
 
                                       LoadingText = "Bắt đầu lấy cookie UID: " + account.Uid;
 
-                                      Cookie = Cookie.Replace(s, s + "|" + account.UserAgent);
+                                      Cookie = Cookie.Replace(s, account.ToString().Trim());
 
                                       var cookie = await FacebookHelper.LoginMFacebook(account.Uid, account.Pass, account.Code2Fa,
                                           account.UserAgent);
                                       if (string.IsNullOrEmpty(cookie))
                                       {
-                                          ErrorAccount += s + "\n";
                                           account.IsError = true;
+                                          account.ErrorMessage = "không get được cookie)";
                                           Account = Account.Replace(s, "").Replace("\n", "");
+
+                                          ErrorAccount += account.ToString() + "\n";
+                                         
                                           LoadingText = "Bắt đầu lấy cookie UID: " + account.Uid + "\nKhông lấy được cookie";
                                       }
                                       else
@@ -252,14 +252,14 @@ namespace MetaTools.CookieToken.ViewModels
 
                                           if (FacebookHelper.CheckPoint(cookie, account.UserAgent))
                                           {
-                                              ErrorAccount += s + "\n";
+                                              account.ErrorMessage = "CheckPoint";
                                               account.IsError = true;
+                                              ErrorAccount += account+"\n";
                                               Account = Account.Replace(s, "").Replace("\n", "");
                                               LoadingText = "Bắt đầu lấy cookie UID: " + account.Uid + "\nTài khoản bị checkpoint";
                                           }
                                           else
                                           {
-                                              Cookie = cookie + "\n" + Cookie;
                                               LoadingText = "Bắt đầu lấy cookie UID: " + account.Uid + "\nDone";
                                               account.Cookie = cookie;
                                           }
