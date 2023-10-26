@@ -92,6 +92,7 @@ namespace MetaTools.CookieToken.ViewModels
 
         private async Task InitData()
         {
+            IsBusy = true;
             await Task.Delay(1000);
 
             _tokenModels = await _tokenRepository.GetAllAsync();
@@ -121,6 +122,7 @@ namespace MetaTools.CookieToken.ViewModels
                 }
             }
 
+            IsBusy = false;
         }
 
         private async Task OpenCheckPoint()
@@ -196,7 +198,7 @@ namespace MetaTools.CookieToken.ViewModels
                     openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
                     openFileDialog.InitialDirectory =
                         Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                    openFileDialog.Title = "Chọn file tài khoản";
+                    openFileDialog.Title = "Chọn tệp tin tài khoản";
                     if (openFileDialog.ShowDialog() == true)
                     {
                         PathAccount = openFileDialog.FileName;

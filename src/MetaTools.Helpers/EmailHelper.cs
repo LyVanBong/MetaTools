@@ -1,6 +1,4 @@
-﻿using Microsoft.AppCenter.Crashes;
-
-namespace MetaTools.Helpers;
+﻿namespace MetaTools.Helpers;
 
 public class EmailHelper
 {

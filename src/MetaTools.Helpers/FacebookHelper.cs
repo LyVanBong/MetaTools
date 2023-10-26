@@ -1,5 +1,4 @@
-﻿using Microsoft.AppCenter.Crashes;
-using HttpMethod = System.Net.Http.HttpMethod;
+﻿using HttpMethod = System.Net.Http.HttpMethod;
 
 namespace MetaTools.Helpers;
 
@@ -354,7 +353,7 @@ public class FacebookHelper
         try
         {
             var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Get,
+            var request = new HttpRequestMessage(System.Net.Http.HttpMethod.Get,
                 "https://graph.facebook.com/v18.0/me/accounts?access_token=" + token);
             request.Headers.Add("authority", "graph.facebook.com");
             request.Headers.Add("accept", "*/*");
@@ -647,17 +646,25 @@ public class FacebookHelper
         return string.Empty;
     }
 
-    public static async Task<bool> LikePost(string token)
+    public static async Task<bool> LikePost(string token, string idUserIdPost)
     {
-        var client = new HttpClient();
-        var request = new HttpRequestMessage(System.Net.Http.HttpMethod.Post, "https://graph.facebook.com/100027295904383_1358942941692223/likes?access_token=" + token);
-        var response = await client.SendAsync(request);
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
-
-        if (content != null)
+        try
         {
-            return bool.Parse(content);
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Post,
+                "https://graph.facebook.com/" + idUserIdPost + "/likes?access_token=" + token);
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (!string.IsNullOrEmpty(content))
+            {
+                return bool.Parse(content);
+            }
+        }
+        catch (Exception e)
+        {
+            Crashes.TrackError(e);
         }
 
         return false;
