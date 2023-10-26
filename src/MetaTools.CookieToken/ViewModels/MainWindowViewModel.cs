@@ -1,4 +1,6 @@
-﻿namespace MetaTools.CookieToken.ViewModels
+﻿using MetaTools.Models;
+
+namespace MetaTools.CookieToken.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
@@ -74,8 +76,7 @@
             set => SetProperty(ref _cookie, value);
         }
 
-        public ICommand OpenCheckPointCommand { get; private set; }
-
+        public ICommand DeleteDataCommand { get; private set; }
         public MainWindowViewModel(IUserAgentService userAgentService, ITokenRepository tokenRepository, IAccountRepository accountRepository)
         {
             _userAgentService = userAgentService;
@@ -83,8 +84,40 @@
             _accountRepository = accountRepository;
             GetAccessTokenCommand = new DelegateCommand<string>(s => _ = GetAccessToken(s));
             GetCookieCommand = new DelegateCommand<string>(s => _ = GetCookie(s));
-            OpenCheckPointCommand = new DelegateCommand(() => _ = OpenCheckPoint());
+            DeleteDataCommand = new DelegateCommand<string>((key) => _ = DeleteData(key));
             _ = InitData();
+        }
+
+        private async Task DeleteData(string key)
+        {
+            IsBusy = true;
+            try
+            {
+                if (key == "0")
+                {
+                    var deleteAccount = await _accountRepository.DeleteAllAsync();
+                    if (deleteAccount > 0)
+                    {
+                        Account = string.Empty;
+                        ErrorAccount = string.Empty;
+                        Cookie = string.Empty;
+                    }
+                }
+                else
+                {
+                    var deleteToken = await _tokenRepository.DeleteAllAsync();
+                    if (deleteToken > 0)
+                    {
+                        AccessToken = string.Empty;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Crashes.TrackError(e);
+            }
+
+            IsBusy = false;
         }
 
         private async Task InitData()
@@ -116,68 +149,6 @@
                         Account += account.ToString() + "\n";
                         Cookie += account.Cookie + "\n";
                     }
-                }
-            }
-
-            IsBusy = false;
-        }
-
-        private async Task OpenCheckPoint()
-        {
-            IsBusy = true;
-            if (string.IsNullOrEmpty(ErrorAccount))
-            {
-                MessageBox.Show("Vui lòng nhập thông tin tài khoản", "Thông báo", MessageBoxButton.OK);
-            }
-            else
-            {
-                var data = ErrorAccount.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-                if (data != null)
-                {
-                    await Parallel.ForEachAsync(data, async (s, token) =>
-                    {
-                        var acc = s.Split('|', StringSplitOptions.RemoveEmptyEntries);
-                        if (acc != null)
-                        {
-                            string uid = acc[0];
-                            string pass = acc[1];
-                            string code2Fa = acc[2];
-                            string email = acc[3];
-                            string passEmail = acc[4];
-                            string ua = _userAgentService.Generate();
-                            LoadingText = "Bắt đầu kiểm tra UID: " + uid;
-
-                            if (FacebookHelper.CheckLogin(uid, pass, code2Fa, ua))
-                            {
-                                LoadingText = "Tài khoản " + uid + " sai mật khẩu hoặc tài khoản";
-                                ErrorAccount = ErrorAccount.Replace(s, s + "|Thông tin đăng nhập sai");
-                            }
-                            else
-                            {
-                                var cookie = await FacebookHelper.LoginMFacebook(uid, pass, code2Fa, ua);
-                                if (string.IsNullOrEmpty(cookie))
-                                {
-                                    LoadingText = "Tài khoản " + uid + " lỗi";
-                                    ErrorAccount = ErrorAccount.Replace(s, s + "|Thông tin lỗi");
-                                }
-                                else
-                                {
-                                    var checkPoint =
-                                        await FacebookHelper.CheckPoint_828281030927956(cookie, ua, email, passEmail);
-                                    cookie = await FacebookHelper.Login(uid, pass, code2Fa, ua);
-                                    if (string.IsNullOrEmpty(cookie))
-                                    {
-                                        LoadingText = "Tài khoản " + uid + " lỗi";
-                                        ErrorAccount = ErrorAccount.Replace(s, s + "|Thông tin lỗi");
-                                    }
-                                    else
-                                    {
-                                        Cookie += cookie + "\n";
-                                    }
-                                }
-                            }
-                        }
-                    });
                 }
             }
 
@@ -227,7 +198,7 @@
                                           Code2Fa = acc[2],
                                           Email = acc[3],
                                           PassEmail = acc[4],
-                                          UserAgent = a == null ? _userAgentService.Generate() : a.UserAgent,
+                                          UserAgent = (a == null ? _userAgentService.Generate() : a.UserAgent)?.Trim(),
                                       };
 
                                       LoadingText = "Bắt đầu lấy cookie UID: " + account.Uid;
@@ -235,33 +206,32 @@
                                       Cookie = Cookie.Replace(s, account.ToString().Trim());
 
                                       var cookie = await FacebookHelper.LoginMFacebook(account.Uid, account.Pass, account.Code2Fa,
-                                          account.UserAgent);
+                                          account!.UserAgent);
                                       if (string.IsNullOrEmpty(cookie))
                                       {
                                           account.IsError = true;
                                           account.ErrorMessage = "không get được cookie)";
                                           Account = Account.Replace(s, "").Replace("\n", "");
-
                                           ErrorAccount += account.ToString() + "\n";
-                                         
+
                                           LoadingText = "Bắt đầu lấy cookie UID: " + account.Uid + "\nKhông lấy được cookie";
                                       }
                                       else
                                       {
+                                          account.Cookie = cookie;
                                           // kiểm tra checkpoint
+                                          var checkPoint =await FacebookHelper.CheckPoint(account);
 
-                                          if (FacebookHelper.CheckPoint(cookie, account.UserAgent))
+                                          if (string.IsNullOrEmpty(checkPoint))
                                           {
-                                              account.ErrorMessage = "CheckPoint";
                                               account.IsError = true;
-                                              ErrorAccount += account+"\n";
+                                              account.ErrorMessage = "không get được cookie)";
                                               Account = Account.Replace(s, "").Replace("\n", "");
-                                              LoadingText = "Bắt đầu lấy cookie UID: " + account.Uid + "\nTài khoản bị checkpoint";
+                                              ErrorAccount += account.ToString() + "\n";
                                           }
                                           else
                                           {
-                                              LoadingText = "Bắt đầu lấy cookie UID: " + account.Uid + "\nDone";
-                                              account.Cookie = cookie;
+                                              Cookie += checkPoint + "\n";
                                           }
                                       }
 
@@ -284,6 +254,7 @@
                     {"Key",obj}
                 });
                 IsBusy = false;
+                LoadingText = "Đang tải...";
             }
         }
 
@@ -372,6 +343,7 @@
                     {"Key",obj}
                 });
                 IsBusy = false;
+                LoadingText = "Đang tải...";
             }
         }
     }

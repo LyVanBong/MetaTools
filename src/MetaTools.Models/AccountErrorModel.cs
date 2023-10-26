@@ -7,8 +7,8 @@ public class AccountErrorModel : AccountModel
     public override string ToString()
     {
         if (IsError)
-            return (base.ToString() + "|" + IsError + "|" + ErrorMessage).Replace("||", "|");
+            return base.ToString() + "|" + ErrorMessage;
         else
-            return base.ToString();
+            return base.ToString() + "|" + Cookie;
     }
 }

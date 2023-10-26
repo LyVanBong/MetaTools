@@ -15,7 +15,6 @@ public class AccountModel
     public string? Token { get; set; }
     public override string ToString()
     {
-        return Uid + "|" + Pass + "|" + Code2Fa + "|" + Email + "|" + PassEmail + "|" + UserAgent + "|" + Cookie + "|" +
-               Token;
+        return Uid + "|" + Pass + "|" + Code2Fa + "|" + Email + "|" + PassEmail + "|" + UserAgent;
     }
 }

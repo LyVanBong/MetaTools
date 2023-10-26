@@ -10,7 +10,7 @@ public class EmailHelper
 
         try
         {
-            await Task.Delay(5000);
+            await Task.Delay(10000);
             using (ImapClient client = new ImapClient())
             {
                 await client.ConnectAsync("outlook.office365.com", 993, true);
