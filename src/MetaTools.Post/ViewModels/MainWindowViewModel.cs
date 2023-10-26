@@ -100,6 +100,7 @@ namespace MetaTools.Post.ViewModels
                         {
                             var like = await FacebookHelper.LikePost(token: tk, idUserIdPost: id);
                             History += id.Trim() + "|" + tk.Trim() + "|" + (like ? "Thành công" : "Lỗi") + "\n";
+                            await Task.Delay(Random.Shared.Next(1000, 3000));
                         }
                     }
                 }
