@@ -210,11 +210,9 @@ namespace MetaTools.CookieToken.ViewModels
                                       if (string.IsNullOrEmpty(cookie))
                                       {
                                           account.IsError = true;
-                                          account.ErrorMessage = "không get được cookie)";
+                                          account.ErrorMessage = "không get được cookie";
                                           Account = Account.Replace(s, "").Replace("\n", "");
                                           ErrorAccount += account.ToString() + "\n";
-
-                                          LoadingText = "Bắt đầu lấy cookie UID: " + account.Uid + "\nKhông lấy được cookie";
                                       }
                                       else
                                       {
@@ -225,13 +223,14 @@ namespace MetaTools.CookieToken.ViewModels
                                           if (string.IsNullOrEmpty(checkPoint))
                                           {
                                               account.IsError = true;
-                                              account.ErrorMessage = "không get được cookie)";
+                                              account.ErrorMessage = "CheckPoint";
                                               Account = Account.Replace(s, "").Replace("\n", "");
                                               ErrorAccount += account.ToString() + "\n";
                                           }
                                           else
                                           {
                                               Cookie += checkPoint + "\n";
+                                              account.Cookie = checkPoint;
                                           }
                                       }
 

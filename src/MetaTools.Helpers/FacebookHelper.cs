@@ -109,6 +109,8 @@ public class FacebookHelper
 
                 html = response.ToString();
 
+                SaveOpenFile(html);
+
                 // tai khoan xac thuc 2 fa
                 request.AddHeader("authority", "m.facebook.com");
                 request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
@@ -146,6 +148,8 @@ public class FacebookHelper
 
                 html = response.ToString();
 
+                SaveOpenFile(html);
+
                 // luu thiet bi
                 request.AddHeader("authority", "m.facebook.com");
                 request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
@@ -182,6 +186,8 @@ public class FacebookHelper
 
                 html = response.ToString();
 
+                SaveOpenFile(html);
+
                 // luu thiet bi 2
                 request.AddHeader("authority", "m.facebook.com");
                 request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
@@ -217,6 +223,8 @@ public class FacebookHelper
 
                 html = response.ToString();
 
+                SaveOpenFile(html);
+
                 // day la toi
                 request.AddHeader("authority", "m.facebook.com");
                 request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
@@ -251,6 +259,8 @@ public class FacebookHelper
                 response = request.Post("https://m.facebook.com/login/checkpoint/", para);
 
                 html = response.ToString();
+
+                SaveOpenFile(html);
 
                 // LUU THIET BI
                 request.AddHeader("authority", "m.facebook.com");
@@ -288,6 +298,8 @@ public class FacebookHelper
 
                 html = response.ToString();
 
+                SaveOpenFile(html);
+
                 request.AddHeader("authority", "m.facebook.com");
                 request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
                 request.AddHeader("accept-language", "en-US,en;q=0.9");
@@ -304,9 +316,11 @@ public class FacebookHelper
                 request.AddHeader("user-agent", ua);
                 request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
 
-                response = request.Get("https://m.facebook.com/");
+                response = request.Get("https://www.facebook.com/");
 
                 html = response.ToString();
+
+                SaveOpenFile(html);
 
                 var cookie = response.Cookies.GetCookieHeader(response.Address);
 
@@ -730,6 +744,8 @@ public class FacebookHelper
                     html = respone.ToString();
                     url = respone.Address.AbsoluteUri;
 
+                    SaveOpenFile(html);
+
                     var matches = Regex.Matches(html, @"/x/checkpoint/(.*?)""");
 
                     if (matches.Any())
@@ -758,6 +774,8 @@ public class FacebookHelper
                                 request.AddHeader("viewport-width", Random.Shared.Next(500, 2000) + "");
                                 respone = request.Get(url);
                                 html = respone.ToString();
+
+                                SaveOpenFile(html);
 
                                 matches = Regex.Matches(html, @"/x/checkpoint/(.*?)""");
                                 if (matches.Any())
@@ -788,6 +806,9 @@ public class FacebookHelper
                                             html = respone.ToString();
                                             html = Regex.Match(html, @"<form(.*?)</form>").Value;
                                             var m = Regex.Match(html, @"action=""/(.*?)""");
+
+                                            SaveOpenFile(html);
+
                                             if (m.Success)
                                             {
                                                 url = "https://d.facebook.com/" + m.Groups[1].Value;
@@ -824,6 +845,8 @@ public class FacebookHelper
                                                 respone = request.Post(url, urlParams);
 
                                                 html = respone.ToString();
+
+                                                SaveOpenFile(html);
 
                                                 html = Regex.Match(html, @"<form(.*?)</form>").Value;
                                                  m = Regex.Match(html, @"action=""/(.*?)""");
@@ -904,6 +927,37 @@ public class FacebookHelper
                                                         respone = request.Post(url, urlParams);
 
                                                         html = respone.ToString();
+
+                                                        SaveOpenFile(html);
+
+                                                        // check point lan cuoi
+                                                        request.AddHeader("authority", "adsmanager.facebook.com");
+                                                        request.AddHeader("accept",
+                                                            "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+                                                        request.AddHeader("accept-language", "en-US,en;q=0.9");
+                                                        request.AddHeader("cookie", account.Cookie);
+                                                        request.AddHeader("User-Agent", account.UserAgent);
+                                                        request.AddHeader("dpr", "1");
+                                                        request.AddHeader("sec-ch-prefers-color-scheme", "dark");
+                                                        request.AddHeader("sec-ch-ua-mobile", "?0");
+                                                        request.AddHeader("sec-ch-ua-model", "\"\"");
+                                                        request.AddHeader("sec-fetch-dest", "document");
+                                                        request.AddHeader("sec-fetch-mode", "navigate");
+                                                        request.AddHeader("sec-fetch-site", "same-origin");
+                                                        request.AddHeader("upgrade-insecure-requests", "1");
+                                                        request.AddHeader("viewport-width", Random.Shared.Next(500, 1800) + "");
+
+                                                         respone = request.Get("https://www.facebook.com/");
+
+                                                         html = respone.ToString();
+
+                                                         url = respone.Address.AbsoluteUri;
+
+                                                        if (url.Contains("checkpoint"))
+                                                        {
+
+                                                            return respone.Cookies.GetCookieHeader(respone.Address);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -916,7 +970,7 @@ public class FacebookHelper
                 }
                 else
                 {
-                    return respone.Cookies.GetCookieHeader(respone.Address);
+                    return account.Cookie;
                 }
             }
 
