@@ -3,15 +3,12 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationIcon>chat.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="icon.ico" />
+    <Content Include="chat.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AppCenter" Version="5.0.3" />
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.3" />
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.3" />
     <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
     <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="23.1.44" />
   </ItemGroup>
