@@ -1,27 +1,17 @@
-# MetaTools
+# MetaTools 🛠
+> Bộ thư viện tiện ích và cấu hình dùng chung cho các dự án .NET.
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/LyVanBong/MetaTools)
-![GitHub issues](https://img.shields.io/github/issues/LyVanBong/MetaTools)
-![GitHub stars](https://img.shields.io/github/stars/LyVanBong/MetaTools)
 
 ## 📝 Giới Thiệu
-Tools For Meta
+**MetaTools** chứa các Class Library, Extension Methods và Helper Functions thường xuyên được sử dụng trong các dự án của **LyVanBong**. Mục tiêu là giảm thiểu mã lặp và chuẩn hóa các cấu hình hệ thống.
 
-Đây là một trong những dự án mã nguồn mở được phát triển và duy trì bởi **LyVanBong**. Mã nguồn được chia sẻ với mục đích học tập và đóng góp cho cộng đồng.
+## 📦 Thành Phần
+-   **MetaTools.Configurations**: Quản lý AppSettings, Environment Variables.
+-   **Visual Studio Visualizers**: Cấu hình hiển thị Debugger cho tiện dụng.
 
-## 🚀 Tính Năng
-- [x] Đang cập nhật...
-- [ ] Tính năng nổi bật sẽ được liệt kê tại đây.
-
-## 🛠 Cài Đặt
-Hướng dẫn cài đặt và sử dụng sẽ sớm được cập nhật.
-
-```bash
-# Clone dự án
-git clone https://github.com/LyVanBong/MetaTools.git
-```
+## 🛠 Công Nghệ
+-   **Framework**: .NET Standard 2.0 / .NET Core.
 
 ## 📞 Liên Hệ
-Nếu bạn có câu hỏi hoặc muốn đóng góp, vui lòng liên hệ:
-- **GitHub**: [LyVanBong](https://github.com/LyVanBong)
-- **Website**: [softty.net](https://softty.net)
+-   **GitHub**: [LyVanBong](https://github.com/LyVanBong)
